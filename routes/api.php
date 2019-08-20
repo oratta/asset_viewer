@@ -10,3 +10,9 @@ Route::get('/reflesh-token', function (Illuminate\Http\Request $request) {
     $request->session()->regenerateToken();
     return response()->json();
 });
+
+Route::get('/profile')->name('profile');
+Route::get('/categorize')->name('categorize.view');
+Route::post('/categorize')->name('categorize.save');
+Route::get('/goal')->name('goal.view');
+Route::post('/goal')->name('goal.save');
