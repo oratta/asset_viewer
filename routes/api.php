@@ -11,7 +11,7 @@ Route::get('/reflesh-token', function (Illuminate\Http\Request $request) {
     return response()->json();
 });
 
-Route::get('/profile')->name('profile');
+Route::get('/portfolio')->name('portfolio');
 Route::get('/categorize')->name('categorize.view');
 Route::post('/categorize')->name('categorize.save');
 Route::get('/goal')->name('goal.view');
