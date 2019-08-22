@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAssetCatetoriesTable extends Migration
+class CreateAssetCategoryMastersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class CreateAssetCatetoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('asset_catetories', function (Blueprint $table) {
-            $table->bigIncrements('id');
+        Schema::create('asset_category_masters', function (Blueprint $table) {
+            $table->smallIncrements('id');
+            $table->smallInteger('parent_id');
+            $table->text('name');
+            $table->boolean('has_child');
             $table->timestamps();
         });
     }
@@ -26,6 +29,6 @@ class CreateAssetCatetoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('asset_catetories');
+        Schema::dropIfExists('asset_category_masters');
     }
 }

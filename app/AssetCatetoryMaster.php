@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class AssetCatetory extends Model
+class AssetCatetoryMaster extends Model
 {
     //
 }
