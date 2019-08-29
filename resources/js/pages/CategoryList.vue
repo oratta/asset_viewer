@@ -5,7 +5,7 @@
                 {{ category.name }}
             </li>
         </ul>
-        <Pagination :current-page="currentPage" :last-page="lastPage" />
+        <Pagination :current-page="currentPage" :last-page="lastPage" path="/categories"/>
     </div>
 </template>
 <script>

@@ -17,8 +17,7 @@ class AssetCategoryController extends Controller
      */
     public function index()
     {
-        $assetCategory = AssetCategoryMaster::with(['owner', 'likes'])
-            ->paginate();
+        $assetCategory = AssetCategoryMaster::paginate();
 
         return $assetCategory;
     }
