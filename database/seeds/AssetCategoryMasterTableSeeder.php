@@ -33,6 +33,7 @@ class AssetCategoryMasterTableSeeder extends Seeder
         $indexArray = array_shift($contentArray);
         $indexArray = explode(',', $indexArray);
         dump($indexArray);
+        if(count($indexArray) !== \App\AssetCategoryMaster::MASTER_COUNT) throw new Exception("invalid master data");
         $returnArray = [];
         foreach ($contentArray as $index => $recode) {
             $recodeArray = explode(',', $recode);

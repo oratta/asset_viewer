@@ -19,12 +19,13 @@ class ViewPortfolioTest extends TestCase
    {
        //set data
        //a user
-       $this->user = factory(User::class)->create(["password" => Hash::make("secret")]);
-
-       //ポートフォリオデータ
-
+       $this->user = factory(User::class)->states('withAsset')->create(["password" => Hash::make("secret")]);
+       $this->assertDatabaseHas('user_asset_categories', ['user_id'=>$this->user->id]);
+       $this->assertDatabaseHas('user_assets', ['user_id'=>$this->user->id]);
 
        //1 section 1 categories
+
+
 
 
        //multi section multi categories
