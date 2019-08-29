@@ -16,6 +16,7 @@ class CreateAssetCategoryMastersTable extends Migration
         Schema::create('asset_category_masters', function (Blueprint $table) {
             $table->smallIncrements('id');
             $table->smallInteger('parent_id');
+            $table->smallInteger('section_id');
             $table->text('name');
             $table->boolean('has_child');
             $table->timestamps();

@@ -5,6 +5,7 @@ import PhotoList from './pages/PhotoList.vue'
 import Login from './pages/Login.vue'
 import SystemError from './pages/errors/System.vue'
 import NotFound from './pages/errors/NotFound.vue'
+import CategoryList from './pages/CategoryList.vue'
 
 import store from './store'
 
@@ -26,6 +27,10 @@ const routes = [
                 next()
             }
         }
+    },
+    {
+        path: '/categories',
+        component: CategoryList,
     },
     {
         path: '/500',
