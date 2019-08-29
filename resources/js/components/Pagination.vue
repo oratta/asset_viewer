@@ -7,7 +7,7 @@
         >&laquo; prev</RouterLink>
         <RouterLink
                 v-if="! isLastPage"
-                :to="`/?page=${currentPage + 1}`"
+                :to="`${path}/?page=${currentPage + 1}`"
                 class="button"
         >next &raquo;</RouterLink>
     </div>
