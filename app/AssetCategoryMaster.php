@@ -13,4 +13,9 @@ class AssetCategoryMaster extends Model
         'id',
         'name',
     ];
+
+    public function userAssetCategories()
+    {
+        return $this->hasMany('App\UserAssetCategory');
+    }
 }

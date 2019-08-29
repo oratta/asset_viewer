@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUserAssetsTable extends Migration
+class CreateUserAssetUserAssetCategory extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateUserAssetsTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_assets', function (Blueprint $table) {
+        Schema::create('user_asset_user_asset_category', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->text('name');
-            $table->integer('user_id')->reference('id')->on('users');
+            $table->smallInteger('user_asset_category_id')->reference('id')->on('user_asset_categories');
+            $table->bigInteger('user_asset_id')->reference('id')->on('user_assets');
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ class CreateUserAssetsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_assets');
+        Schema::dropIfExists('user_asset_user_asset_category');
     }
 }

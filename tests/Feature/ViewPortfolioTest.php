@@ -21,6 +21,8 @@ class ViewPortfolioTest extends TestCase
        //a user
        $this->user = factory(User::class)->create(["password" => Hash::make("secret")]);
 
+       //ポートフォリオデータ
+
 
        //1 section 1 categories
 
