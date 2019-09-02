@@ -18,7 +18,6 @@ class AssetCategoryController extends Controller
     public function index()
     {
         $assetCategory = AssetCategoryMaster::paginate();
-
         return $assetCategory;
     }
 }

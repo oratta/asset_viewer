@@ -15,7 +15,7 @@ Route::get('/reflesh-token', function (Illuminate\Http\Request $request) {
 Route::get('/categories', 'AssetCategoryController@index')->name('category.index');
 
 //本番用
-Route::get('/portfolio')->name('portfolio');
+Route::get('/portfolio', 'UserAssetCategoryController@portfolio')->name('portfolio');
 Route::get('/categorize')->name('categorize.view');
 Route::post('/categorize')->name('categorize.save');
 Route::get('/goal')->name('goal.view');

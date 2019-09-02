@@ -46,4 +46,22 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\UserAssetCategory');
     }
+
+    /**
+     * @return array
+     */
+    public function nestedUserAssetCategories() : array
+    {
+        $uSection = UserAssetCategory::join('asset_category_masters', 'user_asset_categories.asset_category_master_id', '=', 'asset_category_masters.id')
+                    ->where([
+                        "asset_category_masters.section_id", "asset_category_masters.id",
+                        "user_asset_categories.user_id", $this->id,
+                    ])->get();
+
+        $uSection->each(function ($section) {
+            $section->setNest();//TODO implement
+        });
+
+        return $uSection;
+    }
 }

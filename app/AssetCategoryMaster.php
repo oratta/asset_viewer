@@ -19,4 +19,19 @@ class AssetCategoryMaster extends Model
     {
         return $this->hasMany('App\UserAssetCategory');
     }
+
+    public function parent()
+    {
+        return $this->belongsTo('App\AssetCategoryMaster');
+    }
+
+    public function children()
+    {
+        return $this->hasMany('App\AssetCategoryMaster', 'parent_id');
+    }
+
+    public function section()
+    {
+        return $this->belongsTo('App\AssetCategoryMaster');
+    }
 }
