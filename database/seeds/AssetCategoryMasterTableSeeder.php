@@ -32,8 +32,10 @@ class AssetCategoryMasterTableSeeder extends Seeder
         $contentArray = explode("\r\n", $content);
         $indexArray = array_shift($contentArray);
         $indexArray = explode(',', $indexArray);
-        dump($indexArray);
-        if(count($indexArray) !== \App\AssetCategoryMaster::MASTER_COUNT) throw new Exception("invalid master data");
+//        dump($contentArray);
+        if(count($contentArray) !== \App\AssetCategoryMaster::MASTER_COUNT){
+            throw new Exception("invalid master data. count=" . count($contentArray).". MASTER_COUNT=" . \App\AssetCategoryMaster::MASTER_COUNT);
+        }
         $returnArray = [];
         foreach ($contentArray as $index => $recode) {
             $recodeArray = explode(',', $recode);
@@ -43,8 +45,8 @@ class AssetCategoryMasterTableSeeder extends Seeder
             }
             $returnArray[$instanceArray['id']] = $instanceArray;
         }
-        dump(mb_detect_encoding($returnArray[1]['name']));
-        dump($returnArray);
+//        dump(mb_detect_encoding($returnArray[1]['name']));
+//        dump($returnArray);
 
         return $returnArray;
     }

@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Log;
+
 
 class User extends Authenticatable
 {
@@ -53,11 +55,13 @@ class User extends Authenticatable
      */
     public function getNestedUserAssetCategoryList() : Collection
     {
-        $uSectionList = UserAssetCategory::join('asset_category_masters', 'user_asset_categories.asset_category_master_id', '=', 'asset_category_masters.id')
-                    ->where([
-                        "asset_category_masters.section_id", "asset_category_masters.id",
-                        "user_asset_categories.user_id", $this->id,
-                    ])->get();
+        $query = UserAssetCategory::join('asset_category_masters', 'user_asset_categories.asset_category_master_id', '=', 'asset_category_masters.id')
+            ->whereRaw(
+                "asset_category_masters.section_id = asset_category_masters.id and 
+                        user_asset_categories.user_id=$this->id"
+            );
+        Log::debug("query:" . $query->toSql());
+        $uSectionList = $query->get();
 
         return $uSectionList;
     }

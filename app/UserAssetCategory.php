@@ -8,6 +8,11 @@ class UserAssetCategory extends Model
 {
     const MAX_GOAL_RATIO = 10000;
 
+    /**
+     * @var UserAssetCategory
+     */
+    private $parent;
+
     protected $visible = [
         'name',
         'current_info',
@@ -66,28 +71,46 @@ class UserAssetCategory extends Model
         $children = self::join('asset_category_masters', 'user_asset_categories.asset_category_master_id', '=', 'asset_category_masters.id')
             ->where([
                 ['user_asset_categories.user_id',$this->user_id],
-                ['asset_category_master.parent_id', $this->asset_category_master_id],
+                ['asset_category_masters.parent_id', $this->asset_category_master_id],
             ])->get();
+
+        $children->each(function ($child) {
+           $child->parent = $this;
+        });
 
         return $children;
     }
 
+    public function setParentAttribute(UserAssetCategory $parent)
+    {
+        $this->cache["parent"] = $parent;
+    }
+
+    /**
+     * sectionであり親がいない場合はnullを返す
+     * @return mixed
+     */
     public function getParentAttribute()
     {
-        return self::join('asset_category_masters', 'user_asset_categories.asset_category_master_id', '=', 'asset_category_masters.id')
-            ->where([
-                ['user_asset_categories.user_id',$this->user_id],
-                ['asset_category_master.id', $this->asset_category_master->parent_id],
-            ])->get();
+        if (isset($this->cache["parent"]) && $this->cache["parent"] instanceof UserAssetCategory){
+            return $this->parent;
+        }
+        else {
+            return self::join('asset_category_masters', 'user_asset_categories.asset_category_master_id', '=', 'asset_category_masters.id')
+                ->where([
+                    ['user_asset_categories.user_id',$this->user_id],
+                    ['asset_category_masters.id', $this->assetCategoryMaster->parent_id],
+                ])->first();
+        }
     }
 
     public function getCurrentRateAttribute()
     {
-        return $this->parent->current_val * $this->goal_rate;
+        return $this->parent ? $this->parent->current_val * $this->goal_rate : null;
     }
 
     public function getGoalValueAttribute()
     {
-        return $this->current_val / $this->parent->current_val;
+        return $this->parent ? $this->current_val / $this->parent->current_val : null;
     }
 }
