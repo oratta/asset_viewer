@@ -19,7 +19,7 @@ class UserAssetCategoryController extends Controller
         $this->user = Auth::user();
         $uAssetCategoryList = $this->user->nestedUserAssetCategories();
 
-        return App\Http\Helper\ApiHlper::getPortfolioJson($uAssetCategoryList);
+        return $uAssetCategoryList;
     }
 
 }

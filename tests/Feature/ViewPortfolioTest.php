@@ -26,18 +26,8 @@ class ViewPortfolioTest extends TestCase
        $this->assertDatabaseHas('user_asset_categories', ['user_id'=>$this->user->id]);
        $this->assertDatabaseHas('user_assets', ['user_id'=>$this->user->id]);
 
-       $sectionList = AssetCategoryMaster::getSectionList();
-       $sections = [];
-       foreach ($sectionList as $section) {
-           $name = $section->name;
-           $sections[$section->id] = $this->user->getUserCategoryList();
-       }
-
-       $expectJson = App\Http\Helper\ApiHelper::getPortfolioJson($sections);
-
        $response = $this->json('get', route('portfolio'));
        $response
-           ->assertStatus(200)
-           ->assertJson($expectJson);
+           ->assertStatus(200);
    }
 }
