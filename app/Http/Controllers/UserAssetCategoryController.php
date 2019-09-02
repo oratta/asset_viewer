@@ -17,7 +17,7 @@ class UserAssetCategoryController extends Controller
     public function portfolio()
     {
         $this->user = Auth::user();
-        $uAssetCategoryList = $this->user->nestedUserAssetCategories();
+        $uAssetCategoryList = $this->user->getNestedUserAssetCategoryList();
 
         return $uAssetCategoryList;
     }

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -50,18 +51,14 @@ class User extends Authenticatable
     /**
      * @return array
      */
-    public function nestedUserAssetCategories() : array
+    public function getNestedUserAssetCategoryList() : Collection
     {
-        $uSection = UserAssetCategory::join('asset_category_masters', 'user_asset_categories.asset_category_master_id', '=', 'asset_category_masters.id')
+        $uSectionList = UserAssetCategory::join('asset_category_masters', 'user_asset_categories.asset_category_master_id', '=', 'asset_category_masters.id')
                     ->where([
                         "asset_category_masters.section_id", "asset_category_masters.id",
                         "user_asset_categories.user_id", $this->id,
                     ])->get();
 
-        $uSection->each(function ($section) {
-            $section->setNest();//TODO implement
-        });
-
-        return $uSection;
+        return $uSectionList;
     }
 }

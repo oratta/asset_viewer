@@ -26,7 +26,8 @@ class ViewPortfolioTest extends TestCase
        $this->assertDatabaseHas('user_asset_categories', ['user_id'=>$this->user->id]);
        $this->assertDatabaseHas('user_assets', ['user_id'=>$this->user->id]);
 
-       $response = $this->json('get', route('portfolio'));
+       $response = $this->actingAs($this->user)
+           ->json('get', route('portfolio'));
        $response
            ->assertStatus(200);
    }
