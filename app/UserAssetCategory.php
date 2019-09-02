@@ -19,7 +19,10 @@ class UserAssetCategory extends Model
         'name',
         'current_info',
         'goal_info',
+        'parent',
         'children',
+        'current_rate',
+        'goal_value',
     ];
 
     public function assetCategoryMaster()
@@ -44,16 +47,47 @@ class UserAssetCategory extends Model
 
     public function getCurrentInfoAttribute()
     {
-        //TODO
+        return [
+            'value' => $this->current_val,
+            'rate' => $this->current_rate,
+        ];
     }
 
     public function getGoalInfoAttribute()
     {
-        //TODO
+        return [
+            'value' => $this->goal_val,
+            'rate' => $this->goal_rate,
+        ];
     }
 
     public function getChildrenAttribute()
     {
-        //TODO
+        $children = self::join('asset_category_masters', 'user_asset_categories.asset_category_master_id', '=', 'asset_category_masters.id')
+            ->where([
+                ['user_asset_categories.user_id',$this->user_id],
+                ['asset_category_master.parent_id', $this->asset_category_master_id],
+            ])->get();
+
+        return $children;
+    }
+
+    public function getParentAttribute()
+    {
+        return self::join('asset_category_masters', 'user_asset_categories.asset_category_master_id', '=', 'asset_category_masters.id')
+            ->where([
+                ['user_asset_categories.user_id',$this->user_id],
+                ['asset_category_master.id', $this->asset_category_master->parent_id],
+            ])->get();
+    }
+
+    public function getCurrentRateAttribute()
+    {
+        return $this->parent->current_val * $this->goal_rate;
+    }
+
+    public function getGoalValueAttribute()
+    {
+        return $this->current_val / $this->parent->current_val;
     }
 }
