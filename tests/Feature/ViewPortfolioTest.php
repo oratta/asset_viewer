@@ -30,9 +30,18 @@ class ViewPortfolioTest extends TestCase
        $this->assertDatabaseHas('user_assets', ['user_id'=>$this->user->id]);
        $this->assertDatabaseHas('asset_category_masters', ['id'=>1]);
 
+       $masters = AssetCategoryMaster::whereIn('id', [1, 2, 3])->get();
+       $jsonExpected =
+           [
+               ['name'=>$masters[0]->name],
+               ['name'=>$masters[1]->name],
+               ['name'=>$masters[2]->name]
+           ];
+
        $response = $this->actingAs($this->user)
            ->json('get', route('portfolio'));
        $response
-           ->assertStatus(200);
+           ->assertStatus(200)
+            ->assertJson($jsonExpected);
    }
 }
