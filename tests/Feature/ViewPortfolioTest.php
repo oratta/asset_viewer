@@ -8,6 +8,7 @@ use App\UserAssetCategory;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\Compilers\Concerns\CompilesHelpers;
+use Tests\SeedingDatabase;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -15,6 +16,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class ViewPortfolioTest extends TestCase
 {
     use RefreshDatabase;
+    use SeedingDatabase;
 
 
    /**

@@ -26,10 +26,10 @@ abstract class TestCase extends BaseTestCase
     public function setUp() : void
     {
         parent::setUp();
-        // 最初のみ実行するフラグを追加
-        if (!static::$databaseSetup) {
-            Artisan::call('migrate:refresh --seed');
-            static::$databaseSetup = true;
+
+        $uses = array_flip(class_uses_recursive(static::class));
+        if(isset($uses[SeedingDatabase::class]) && !static::$databaseSetup){
+            $this->seedingDatabase();
         }
     }
 }
