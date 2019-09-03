@@ -19,7 +19,7 @@ class UserAssetCategoryController extends Controller
         $this->user = Auth::user();
         $uAssetCategoryList = $this->user->getNestedUserAssetCategoryList();
 
-        return $uAssetCategoryList;
+        return $uAssetCategoryList->isEmpty() ? abort(204) : $uAssetCategoryList;
     }
 
 }
