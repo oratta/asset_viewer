@@ -5,6 +5,7 @@ import Login from './pages/Login.vue'
 import SystemError from './pages/errors/System.vue'
 import NotFound from './pages/errors/NotFound.vue'
 import CategoryList from './pages/CategoryList.vue'
+import Portfolio from './pages/Portfolio.vue'
 
 import store from './store'
 
@@ -30,6 +31,10 @@ const routes = [
             const page = route.query.page
             return { page: /^[1-9][0-9]*$/.test(page) ? page * 1 : 1 }
         }
+    },
+    {
+        path: '/portfolio',
+        component: Portfolio,
     },
     {
         path: '/500',
