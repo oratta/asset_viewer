@@ -10,6 +10,10 @@ class UserAssetCategory extends Model
 
     protected $cache = [];
 
+    protected $guarded = [
+        'id',
+    ];
+
     protected $visible = [
         'name',
         'current_info',
