@@ -60,7 +60,6 @@ class User extends Authenticatable
                 "asset_category_masters.section_id = asset_category_masters.id and 
                         user_asset_categories.user_id=$this->id"
             );
-        Log::debug("query:" . $query->toSql());
         $uSectionList = $query->get();
 
         return $uSectionList;
