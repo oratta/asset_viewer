@@ -30,6 +30,29 @@ class ViewPortfolioTest extends TestCase
        $this->assertDatabaseHas('user_assets', ['user_id'=>$this->user->id]);
        $this->assertDatabaseHas('asset_category_masters', ['id'=>1]);
 
+       $response = $this->actingAs($this->user)
+           ->json('get', route('portfolio'));
+       $this->__checkJson($response);
+   }
+
+    /**
+     * @test
+     */
+   public function should_user_asset_categoriesにデータが無かったら作成する()
+   {
+       $this->user = factory(User::class)->create();
+       $this->assertDatabaseMissing('user_asset_categories', ['user_id' => $this->user->id]);
+       $response = $this->actingAs($this->user)
+            ->json('get', route('portfolio'));
+
+       //データ作成済み
+       $this->assertDatabaseHas('user_asset_categories', ['user_id' => $this->user->id]);
+
+       $this->__checkJson($response);
+   }
+
+   private function __checkJson($response)
+   {
        $masters = AssetCategoryMaster::whereIn('id', [1, 2, 3])->get();
        $jsonExpected =
            [
@@ -37,11 +60,8 @@ class ViewPortfolioTest extends TestCase
                ['name'=>$masters[1]->name],
                ['name'=>$masters[2]->name]
            ];
-
-       $response = $this->actingAs($this->user)
-           ->json('get', route('portfolio'));
        $response
            ->assertStatus(200)
-            ->assertJson($jsonExpected);
+           ->assertJson($jsonExpected);
    }
 }
