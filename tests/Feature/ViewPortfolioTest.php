@@ -17,7 +17,6 @@ class ViewPortfolioTest extends TestCase
     use RefreshDatabase;
 
 
-
    /**
     * @test
     */
@@ -38,17 +37,13 @@ class ViewPortfolioTest extends TestCase
     /**
      * @test
      */
-   public function should_user_asset_categoriesにデータが無かったら作成する()
+   public function should_user_asset_categoriesにデータが無かったらエラーを返す()
    {
        $this->user = factory(User::class)->create();
        $this->assertDatabaseMissing('user_asset_categories', ['user_id' => $this->user->id]);
        $response = $this->actingAs($this->user)
             ->json('get', route('portfolio'));
-
-       //データ作成済み
-       $this->assertDatabaseHas('user_asset_categories', ['user_id' => $this->user->id]);
-
-       $this->__checkJson($response);
+       $response->assertStatus(204);
    }
 
    private function __checkJson($response)
