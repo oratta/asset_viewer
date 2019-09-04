@@ -1,15 +1,32 @@
 <template>
-    <div class="container--small">
-        <ul class="tab">
-            <li
-                    v-for="(section, id) in sections"
-                    class="tab__item"
-                    :class="{'tab__item--active': sectionTab === id }"
-                    @click="sectionTab = id"
-            >{{ section.name }}</li>
-        </ul>
-        <div class="panel">
-            {{ sections[sectionTab].name }}
+    <div class="portfolio">
+        <div class="container--small">
+            <ul class="tab">
+                <li
+                        v-for="(section, id) in sections"
+                        class="tab__item"
+                        :class="{'tab__item--active': sectionTab === id }"
+                        @click="sectionTab = id"
+                >{{ section.name }}</li>
+            </ul>
+            <div class="panel">
+                <div class="summary">
+                    合計 : {{ sections[sectionTab].current_info.val }}
+                </div>
+                <div class="pie-chart">
+
+                </div>
+                <div class="asset-list">
+                    <ul class="asset-list">
+                        <li
+                                v-for="(asset, index) in sections[sectionTab].children"
+                                class="asset-list__item"
+                        >
+                            {{asset.name}} : ¥{{ asset.current_info.val }} ({{ asset.current_info.rate }}%)
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 </template>
