@@ -1,7 +1,7 @@
 <template>
     <nav class="navbar">
         <RouterLink class="navbar__brand" to="/">
-            Vuesplash
+            AsseTomo
         </RouterLink>
         <div class="navbar__menu">
             <div v-if="isLogin" class="navbar__item">

@@ -1,10 +1,11 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-import PhotoList from './pages/PhotoList.vue'
 import Login from './pages/Login.vue'
 import SystemError from './pages/errors/System.vue'
 import NotFound from './pages/errors/NotFound.vue'
+import CategoryList from './pages/CategoryList.vue'
+import Portfolio from './pages/Portfolio.vue'
 
 import store from './store'
 
@@ -12,10 +13,6 @@ import store from './store'
 Vue.use(VueRouter)
 
 const routes = [
-    {
-        path: '/',
-        component: PhotoList
-    },
     {
         path: '/login',
         component: Login,
@@ -26,6 +23,18 @@ const routes = [
                 next()
             }
         }
+    },
+    {
+        path: '/categories',
+        component: CategoryList,
+        props: route => {
+            const page = route.query.page
+            return { page: /^[1-9][0-9]*$/.test(page) ? page * 1 : 1 }
+        }
+    },
+    {
+        path: '/portfolio',
+        component: Portfolio,
     },
     {
         path: '/500',
