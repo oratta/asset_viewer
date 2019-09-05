@@ -28,7 +28,11 @@ $factory->define(User::class, function (Faker $faker) {
 });
 
 $factory->afterCreatingState(App\User::class, 'withAsset', function ($user, $faker) {
+    $uAssetCategoryList = [];
     for($i=1;$i<=\App\AssetCategoryMaster::MASTER_COUNT;++$i){
-        factory(App\UserAssetCategory::class)->create(['user_id'=>$user->id, 'asset_category_master_id'=>$i]);
+        $uAssetCategoryList[] = factory(App\UserAssetCategory::class)->create(['user_id'=>$user->id, 'asset_category_master_id'=>$i]);
+    }
+    foreach($uAssetCategoryList as $uAssetCategory){
+        $uAssetCategory->userAssets()->saveMany(factory(App\UserAsset::class,5)->make(['user_id' => $user->id]));
     }
 });
