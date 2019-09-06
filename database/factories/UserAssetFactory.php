@@ -11,7 +11,7 @@ $factory->define(UserAsset::class, function (Faker $faker) {
             return factory(App\User::class)->crate()->id;
         },
         'name' => $faker->streetName,
-        'val' => function(){
+        'value' => function(){
             return mt_rand(1, 1000000);
         }
     ];

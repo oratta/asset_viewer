@@ -18,7 +18,7 @@ class CreateUserCategoriesTable extends Migration
             $table->integer('user_id')->references('id')->on('users');
             $table->smallInteger('category_master_id')->references('id')->on('category_masters');
             $table->smallInteger('goal_ratio');
-            $table->bigInteger('current_val');
+            $table->bigInteger('current_value');
             $table->timestamps();
         });
     }

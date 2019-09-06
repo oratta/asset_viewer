@@ -54,7 +54,7 @@ class UserCategory extends Model
     public function getCurrentInfoAttribute()
     {
         return [
-            'value' => $this->current_val,
+            'value' => $this->current_value,
             'rate' => $this->current_rate,
         ];
     }
@@ -62,7 +62,7 @@ class UserCategory extends Model
     public function getGoalInfoAttribute()
     {
         return [
-            'value' => $this->goal_val,
+            'value' => $this->goal_value,
             'rate' => $this->goal_rate,
         ];
     }
@@ -108,11 +108,11 @@ class UserCategory extends Model
 
     public function getCurrentRateAttribute()
     {
-        return $this->parent ? $this->parent->current_val * $this->goal_rate : null;
+        return $this->parent ? $this->parent->current_value * $this->goal_rate : null;
     }
 
     public function getGoalValueAttribute()
     {
-        return $this->parent ? $this->current_val / $this->parent->current_val : null;
+        return $this->parent ? $this->current_value / $this->parent->current_value : null;
     }
 }

@@ -17,7 +17,7 @@ class CreateUserAssetsTable extends Migration
             $table->bigIncrements('id');
             $table->text('name');
             $table->integer('user_id')->reference('id')->on('users');
-            $table->bigInteger('val');
+            $table->bigInteger('value');
             $table->timestamps();
         });
     }

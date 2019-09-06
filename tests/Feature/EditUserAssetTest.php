@@ -33,7 +33,7 @@ class EditUserAssetTest extends TestCase
             ->json('get', route('categorize.view'));
 
         $category = CategoryMaster::where('section_id',1)->first();
-        $uAsset = UserAsset::where('user_id', 1)->first();
+        $uAsset = UserAsset::where('user_id', $this->user->id)->first();
 
         $expected1 = [
             'sectionInfo' => [
@@ -43,12 +43,12 @@ class EditUserAssetTest extends TestCase
 
         $expected2 = [
             'userAssetList' => [
-                1 => [
+                0 => [
                     'name' => $uAsset->name,
-                    'categories' => [
+                    'categoryIds' => [
                         1 => $uAsset->categoryMasters->first()->id,
                     ],
-                    'value' => $uAsset->val,
+                    'value' => $uAsset->value,
                 ]
             ]
         ];

@@ -36,7 +36,7 @@ class UserAssetController extends Controller
     private function __getUserAssetList()
     {
         $user = Auth::user();
-        $uAssetList = $user->userAssets();
+        $uAssetList = $user->userAssets;
         return $uAssetList;
     }
 }
