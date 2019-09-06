@@ -34,4 +34,9 @@ class AssetCategoryMaster extends Model
     {
         return $this->belongsTo('App\AssetCategoryMaster');
     }
+
+    static public function getSectionList()
+    {
+        return [];
+    }
 }
