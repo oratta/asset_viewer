@@ -2,7 +2,7 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 use App\User;
-use App\UserAssetCategory;
+use App\UserCategory;
 use Illuminate\Support\Str;
 use Faker\Generator as Faker;
 
@@ -28,11 +28,11 @@ $factory->define(User::class, function (Faker $faker) {
 });
 
 $factory->afterCreatingState(App\User::class, 'withAsset', function ($user, $faker) {
-    $uAssetCategoryList = [];
-    for($i=1;$i<=\App\AssetCategoryMaster::MASTER_COUNT;++$i){
-        $uAssetCategoryList[] = factory(App\UserAssetCategory::class)->create(['user_id'=>$user->id, 'asset_category_master_id'=>$i]);
+    $uCategoryList = [];
+    for($i=1; $i<=\App\CategoryMaster::MASTER_COUNT; ++$i){
+        $uCategoryList[] = factory(App\UserCategory::class)->create(['user_id'=>$user->id, 'category_master_id'=>$i]);
     }
-    foreach($uAssetCategoryList as $uAssetCategory){
-        $uAssetCategory->userAssets()->saveMany(factory(App\UserAsset::class,5)->make(['user_id' => $user->id]));
+    foreach($uCategoryList as $uCategory){
+        $uCategory->userAssets()->saveMany(factory(App\UserAsset::class,5)->make(['user_id' => $user->id]));
     }
 });

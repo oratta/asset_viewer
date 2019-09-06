@@ -2,9 +2,9 @@
 
 namespace Tests\Feature;
 
-use App\AssetCategoryMaster;
+use App\CategoryMaster;
 use App\User;
-use App\UserAssetCategory;
+use App\UserCategory;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\Compilers\Concerns\CompilesHelpers;
@@ -27,22 +27,23 @@ class ViewPortfolioTest extends TestCase
        //set data
        //a user
        $this->user = factory(User::class)->states('withAsset')->create(["password" => Hash::make("secret")]);
-       $this->assertDatabaseHas('user_asset_categories', ['user_id'=>$this->user->id]);
+       $this->assertDatabaseHas('user_categories', ['user_id'=>$this->user->id]);
        $this->assertDatabaseHas('user_assets', ['user_id'=>$this->user->id]);
-       $this->assertDatabaseHas('asset_category_masters', ['id'=>1]);
+       $this->assertDatabaseHas('category_masters', ['id'=>1]);
 
        $response = $this->actingAs($this->user)
            ->json('get', route('portfolio'));
+       $response->assertJson(200);
        $this->__checkJson($response);
    }
 
     /**
      * @test
      */
-   public function should_user_asset_categoriesにデータが無かったらエラーを返す()
+   public function should_user_categoriesにデータが無かったらエラーを返す()
    {
        $this->user = factory(User::class)->create();
-       $this->assertDatabaseMissing('user_asset_categories', ['user_id' => $this->user->id]);
+       $this->assertDatabaseMissing('user_categories', ['user_id' => $this->user->id]);
        $response = $this->actingAs($this->user)
             ->json('get', route('portfolio'));
        $response->assertStatus(204);
@@ -50,7 +51,7 @@ class ViewPortfolioTest extends TestCase
 
    private function __checkJson($response)
    {
-       $masters = AssetCategoryMaster::whereIn('id', [1, 2, 3])->get();
+       $masters = CategoryMaster::whereIn('id', [1, 2, 3])->get();
        $jsonExpected =
            [
                ['name'=>$masters[0]->name],

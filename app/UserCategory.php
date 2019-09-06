@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class UserAssetCategory extends Model
+class UserCategory extends Model
 {
     const MAX_GOAL_RATIO = 10000;
 
@@ -31,9 +31,9 @@ class UserAssetCategory extends Model
         'goal_value',
     ];
 
-    public function assetCategoryMaster()
+    public function categoryMaster()
     {
-        return $this->belongsTo('App\AssetCategoryMaster');
+        return $this->belongsTo('App\CategoryMaster');
     }
 
     public function user()
@@ -48,7 +48,7 @@ class UserAssetCategory extends Model
 
     public function getNameAttribute()
     {
-        return $this->assetCategoryMaster->name;
+        return $this->categoryMaster->name;
     }
 
     public function getCurrentInfoAttribute()
@@ -69,11 +69,11 @@ class UserAssetCategory extends Model
 
     public function getChildrenAttribute()
     {
-        $children = self::join('asset_category_masters', 'user_asset_categories.asset_category_master_id', '=', 'asset_category_masters.id')
+        $children = self::join('category_masters', 'user_categories.category_master_id', '=', 'category_masters.id')
             ->where([
-                ['user_asset_categories.user_id',$this->user_id],
-                ['asset_category_masters.parent_id', $this->asset_category_master_id],
-                ['user_asset_categories.id','<>', $this->id],
+                ['user_categories.user_id',$this->user_id],
+                ['category_masters.parent_id', $this->category_master_id],
+                ['user_categories.id','<>', $this->id],
             ])->get();
 
         $children->each(function ($child) {
@@ -83,7 +83,7 @@ class UserAssetCategory extends Model
         return $children;
     }
 
-    public function setParentAttribute(UserAssetCategory $parent)
+    public function setParentAttribute(UserCategory $parent)
     {
         $this->cache["parent"] = $parent;
     }
@@ -94,14 +94,14 @@ class UserAssetCategory extends Model
      */
     public function getParentAttribute()
     {
-        if (isset($this->cache["parent"]) && $this->cache["parent"] instanceof UserAssetCategory){
+        if (isset($this->cache["parent"]) && $this->cache["parent"] instanceof UserCategory){
             return $this->cache["parent"];
         }
         else {
-            return self::join('asset_category_masters', 'user_asset_categories.asset_category_master_id', '=', 'asset_category_masters.id')
+            return self::join('category_masters', 'user_categories.category_master_id', '=', 'category_masters.id')
                 ->where([
-                    ['user_asset_categories.user_id',$this->user_id],
-                    ['asset_category_masters.id', $this->assetCategoryMaster->parent_id],
+                    ['user_categories.user_id',$this->user_id],
+                    ['category_masters.id', $this->categoryMaster->parent_id],
                 ])->first();
         }
     }

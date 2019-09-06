@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class AssetCategoryMaster extends Model
+class CategoryMaster extends Model
 {
     const MASTER_COUNT = 43;
     protected $perPage = 15; //ページングのページ数
@@ -15,24 +15,24 @@ class AssetCategoryMaster extends Model
         'name',
     ];
 
-    public function userAssetCategories()
+    public function userCategories()
     {
-        return $this->hasMany('App\UserAssetCategory');
+        return $this->hasMany('App\UserCategory');
     }
 
     public function parent()
     {
-        return $this->belongsTo('App\AssetCategoryMaster');
+        return $this->belongsTo('App\CategoryMaster');
     }
 
     public function children()
     {
-        return $this->hasMany('App\AssetCategoryMaster', 'parent_id');
+        return $this->hasMany('App\CategoryMaster', 'parent_id');
     }
 
     public function section()
     {
-        return $this->belongsTo('App\AssetCategoryMaster');
+        return $this->belongsTo('App\CategoryMaster');
     }
 
     static public function getSectionList()

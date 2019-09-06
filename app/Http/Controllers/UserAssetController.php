@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\AssetCategoryMaster;
+use App\CategoryMaster;
 use App\UserAsset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,9 +25,9 @@ class UserAssetController extends Controller
     private function __getSelectInfo()
     {
         $returnList = [];
-        $sectionList = AssetCategoryMaster::getSectionList();
+        $sectionList = CategoryMaster::getSectionList();
         foreach ($sectionList as $sectionId => $section){
-            $nameList = AssetCategoryMaster::where('section_id', $sectionId)->pluck('name', 'id');
+            $nameList = CategoryMaster::where('section_id', $sectionId)->pluck('name', 'id');
             $returnList[$sectionId] = $nameList;
         }
         return $returnList;

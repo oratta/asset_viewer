@@ -2,11 +2,11 @@
 
 use Illuminate\Database\Seeder;
 
-class AssetCategoryMasterTableSeeder extends Seeder
+class CategoryMasterTableSeeder extends Seeder
 {
-    protected $csvFileName = "AssetCategoryMaster.csv";
+    protected $csvFileName = "CategoryMaster.csv";
     protected $csvFilePath = "";
-    protected $tableName = 'asset_category_masters';
+    protected $tableName = 'category_masters';
     /**
      * Run the database seeds.
      *
@@ -35,8 +35,8 @@ class AssetCategoryMasterTableSeeder extends Seeder
         $contentArray = explode("\n", $content);
         $indexArray = array_shift($contentArray);
         $indexArray = explode(',', $indexArray);
-        if(count($contentArray) !== \App\AssetCategoryMaster::MASTER_COUNT){
-            throw new Exception("invalid master data. count=" . count($contentArray).". MASTER_COUNT=" . \App\AssetCategoryMaster::MASTER_COUNT);
+        if(count($contentArray) !== \App\CategoryMaster::MASTER_COUNT){
+            throw new Exception("invalid master data. count=" . count($contentArray).". MASTER_COUNT=" . \App\CategoryMaster::MASTER_COUNT);
         }
         $returnArray = [];
         foreach ($contentArray as $index => $recode) {

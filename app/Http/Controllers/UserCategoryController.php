@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
-use App\AssetCategoryMaster;
+use App\CategoryMaster;
 use Illuminate\Support\Facades\Auth;
 
-class UserAssetCategoryController extends Controller
+class UserCategoryController extends Controller
 {
     /**
      * @var User
@@ -17,9 +17,9 @@ class UserAssetCategoryController extends Controller
     public function portfolio()
     {
         $this->user = Auth::user();
-        $uAssetCategoryList = $this->user->getNestedUserAssetCategoryList();
+        $uCategoryList = $this->user->getNestedUserCategoryList();
 
-        return $uAssetCategoryList->isEmpty() ? abort(204) : $uAssetCategoryList;
+        return $uCategoryList->isEmpty() ? abort(204) : $uCategoryList;
     }
 
 }

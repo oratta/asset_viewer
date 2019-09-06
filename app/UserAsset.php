@@ -9,14 +9,14 @@ class UserAsset extends Model
 {
     /** JSONに含める属性の指定 */
     protected $visible = [
-        'assetCategoryIds',
+        'categoryIds',
         'name',
         'value',
     ];
 
     protected $appends = [
-        'assetCategoryIds',
-        'assetCategoryMasters'
+        'categoryIds',
+        'categoryMasters'
     ];
 
     public function user()
@@ -24,27 +24,27 @@ class UserAsset extends Model
         return $this->belongsTo('App\User');
     }
 
-    public function userAssetCategories()
+    public function userCategories()
     {
-        return $this->belongsToMany('App\UserAssetCategory');
+        return $this->belongsToMany('App\UserCategory');
     }
 
-    public function getAssetCategoryMastersAttribute()
+    public function getCategoryMastersAttribute()
     {
-        return $this->userAssetCategories->map(function ($uAssetCategory) {
-            return $uAssetCategory->assetCategoryMaster;
+        return $this->userCategories->map(function ($uCategory) {
+            return $uCategory->categoryMaster;
         });
     }
 
 
-    public function getAssetCategoryIdsAttribute()
+    public function getCategoryIdsAttribute()
     {
         $returnList = [];
-        foreach ($this->assetCategoryMasters as $assetCategory){
-            if(isset($returnList[$assetCategory->section_id])){
+        foreach ($this->categoryMasters as $category){
+            if(isset($returnList[$category->section_id])){
                 throw new Exception('invalid data');
             }
-            $returnList[$assetCategory->section_id] = $assetCategory->id;
+            $returnList[$category->section_id] = $category->id;
         }
 
         return $returnList;

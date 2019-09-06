@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\AssetCategoryMaster;
+use App\CategoryMaster;
 use App\User;
 use App\UserAsset;
 use Tests\TestCase;
@@ -27,22 +27,22 @@ class EditUserAssetTest extends TestCase
     {
 
         $this->assertDatabaseHas('user_assets', ['user_id' => $this->user->id]);
-        $this->assertDatabaseHas('asset_category_masters', ['id' => 1]);
+        $this->assertDatabaseHas('category_masters', ['id' => 1]);
 
         $request = $this->actingAs($this->user)
             ->json('get', route('categorize.view'));
 
-        $assetCategory = AssetCategoryMaster::where('section_id',1)->first();
+        $category = CategoryMaster::where('section_id',1)->first();
         $uAsset = UserAsset::where('user_id', 1)->first();
         $expected = [
             'selectInfo' => [
-                1 => [$assetCategory->id => $assetCategory->name],
+                1 => [$category->id => $category->name],
             ],
             'userAssetList' => [
                 1 => [
                     'name' => $uAsset->name,
                     'categories' => [
-                        1 => $uAsset->assetCategoryMasters()->first()->id,
+                        1 => $uAsset->categoryMasters()->first()->id,
                     ],
                     'value' => $uAsset->value,
                 ]

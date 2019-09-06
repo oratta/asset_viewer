@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\AssetCategoryMaster;
+use App\CategoryMaster;
 use App\User;
 use App\Http\Controllers\Controller;
 use App\UserAsset;
-use App\UserAssetCategory;
+use App\UserCategory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -72,10 +72,10 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
-        for($i=1;$i<=AssetCategoryMaster::MASTER_COUNT;++$i){
-            UserAssetCategory::create([
+        for($i=1; $i<=CategoryMaster::MASTER_COUNT; ++$i){
+            UserCategory::create([
                 'user_id'=>$user->id,
-                'asset_category_master_id' => $i,
+                'category_master_id' => $i,
                 'goal_ratio' => 0,
                 'current_val' => 0,
             ]);
