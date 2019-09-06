@@ -16,7 +16,7 @@ Route::get('/categories', 'CategoryController@index')->name('category.index');
 
 //本番用
 Route::get('/portfolio', 'UserCategoryController@portfolio')->name('portfolio');
-Route::get('/categorize', 'UserAssetController@index')->name('userAsset');
+Route::get('/user_asset', 'UserAssetController@index')->name('userAsset');
 Route::post('/categorize')->name('categorize.save');
 Route::get('/goal')->name('goal.view');
 Route::post('/goal')->name('goal.save');

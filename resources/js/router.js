@@ -6,6 +6,7 @@ import SystemError from './pages/errors/System.vue'
 import NotFound from './pages/errors/NotFound.vue'
 import CategoryList from './pages/CategoryList.vue'
 import Portfolio from './pages/Portfolio.vue'
+import UserAsset from './pages/UserAsset.vue'
 
 import store from './store'
 
