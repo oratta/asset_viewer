@@ -77,7 +77,7 @@ class RegisterController extends Controller
                 'user_id'=>$user->id,
                 'category_master_id' => $i,
                 'goal_ratio' => 0,
-                'current_val' => 0,
+                'current_value' => 0,
             ]);
         }
         return $user;
