@@ -14,6 +14,9 @@ Route::get('/reflesh-token', function (Illuminate\Http\Request $request) {
 //動作確認用
 Route::get('/categories', 'CategoryController@index')->name('category.index');
 
+//デバッグメニュー用
+Route::post('/debug/add_asset', 'DebugController@addAsset')->name('debug.addAsset');
+
 //本番用
 Route::get('/portfolio', 'UserCategoryController@portfolio')->name('portfolio');
 Route::get('/user_asset', 'UserAssetController@index')->name('userAsset');
