@@ -30,7 +30,7 @@ class EditUserAssetTest extends TestCase
         $this->assertDatabaseHas('category_masters', ['id' => 1]);
 
         $request = $this->actingAs($this->user)
-            ->json('get', route('categorize.view'));
+            ->json('get', route('userAsset'));
 
         $category = CategoryMaster::where('section_id',1)->first();
         $uAsset = UserAsset::where('user_id', $this->user->id)->first();

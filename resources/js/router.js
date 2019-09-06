@@ -33,6 +33,10 @@ const routes = [
         }
     },
     {
+        path: '/user_asset',
+        component: UserAsset,
+    },
+    {
         path: '/portfolio',
         component: Portfolio,
     },
@@ -40,6 +44,7 @@ const routes = [
         path: '/500',
         component: SystemError
     },
+
     {
         path: "*",
         component: NotFound
