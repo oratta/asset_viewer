@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\AssetCategoryMaster;
 use App\UserAsset;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserAssetController extends Controller
 {
@@ -26,7 +27,7 @@ class UserAssetController extends Controller
         $returnList = [];
         $sectionList = AssetCategoryMaster::getSectionList();
         foreach ($sectionList as $sectionId => $section){
-            $nameList = AssetCategoryMaster::where('section_id', $sectionId)->column('name');
+            $nameList = AssetCategoryMaster::where('section_id', $sectionId)->pluck('name', 'id');
             $returnList[$sectionId] = $nameList;
         }
         return $returnList;
@@ -34,7 +35,8 @@ class UserAssetController extends Controller
 
     private function __getUserAssetList()
     {
-        $uAssetList = UserAsset::where('user_id', $this->user->id);
+        $user = Auth::user();
+        $uAssetList = $user->userAssets();
         return $uAssetList;
     }
 }

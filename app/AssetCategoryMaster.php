@@ -37,6 +37,6 @@ class AssetCategoryMaster extends Model
 
     static public function getSectionList()
     {
-        return [];
+        return self::whereRaw('section_id = id')->get()->keyBy('id');
     }
 }

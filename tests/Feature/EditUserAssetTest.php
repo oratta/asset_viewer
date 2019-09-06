@@ -4,10 +4,8 @@ namespace Tests\Feature;
 
 use App\AssetCategoryMaster;
 use App\User;
-use App\UserAssetCategory;
-use Illuminate\Support\Facades\Hash;
+use App\UserAsset;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\SeedingDatabase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -29,12 +27,13 @@ class EditUserAssetTest extends TestCase
     {
 
         $this->assertDatabaseHas('user_assets', ['user_id' => $this->user->id]);
+        $this->assertDatabaseHas('asset_category_masters', ['id' => 1]);
 
         $request = $this->actingAs($this->user)
-            ->json('get', route('categorize'));
+            ->json('get', route('categorize.view'));
 
-        $assetCategory = AssetCategoryMaster::where(['section_id',1])->first();
-        $uAsset = UserAssetCategory::where(['user_id', 1])->first();
+        $assetCategory = AssetCategoryMaster::where('section_id',1)->first();
+        $uAsset = UserAsset::where('user_id', 1)->first();
         $expected = [
             'selectInfo' => [
                 1 => [$assetCategory->id => $assetCategory->name],
