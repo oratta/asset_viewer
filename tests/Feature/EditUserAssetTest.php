@@ -34,22 +34,27 @@ class EditUserAssetTest extends TestCase
 
         $category = CategoryMaster::where('section_id',1)->first();
         $uAsset = UserAsset::where('user_id', 1)->first();
-        $expected = [
-            'selectInfo' => [
+
+        $expected1 = [
+            'sectionInfo' => [
                 1 => [$category->id => $category->name],
             ],
+        ];
+
+        $expected2 = [
             'userAssetList' => [
                 1 => [
                     'name' => $uAsset->name,
                     'categories' => [
-                        1 => $uAsset->categoryMasters()->first()->id,
+                        1 => $uAsset->categoryMasters->first()->id,
                     ],
-                    'value' => $uAsset->value,
+                    'value' => $uAsset->val,
                 ]
             ]
         ];
 
-        $request->assertStatus('200');
-        $request->assertJson($expected);
+        $request->assertStatus(200);
+        $request->assertJson($expected1);
+        $request->assertJson($expected2);
     }
 }

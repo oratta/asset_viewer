@@ -33,7 +33,7 @@ class ViewPortfolioTest extends TestCase
 
        $response = $this->actingAs($this->user)
            ->json('get', route('portfolio'));
-       $response->assertJson(200);
+       $response->assertStatus(200);
        $this->__checkJson($response);
    }
 

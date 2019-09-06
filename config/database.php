@@ -39,6 +39,7 @@ return [
             'driver' => 'sqlite',
             'database' => ':memory:',
             'prefix' => '',
+            'charset' => 'utf8mb4',
         ],
 
         'sqlite' => [
