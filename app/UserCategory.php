@@ -97,12 +97,15 @@ class UserCategory extends Model
         if (isset($this->cache["parent"]) && $this->cache["parent"] instanceof UserCategory){
             return $this->cache["parent"];
         }
-        else {
+        else if($this->categoryMaster->hasParent()) {
             return self::join('category_masters', 'user_categories.category_master_id', '=', 'category_masters.id')
                 ->where([
                     ['user_categories.user_id',$this->user_id],
                     ['category_masters.id', $this->categoryMaster->parent_id],
                 ])->first();
+        }
+        else {
+            return null;
         }
     }
 
@@ -114,5 +117,18 @@ class UserCategory extends Model
     public function getGoalValueAttribute()
     {
         return $this->parent ? $this->current_value / $this->parent->current_value : null;
+    }
+
+    public function hasChild()
+    {
+        return $this->categoryMaster->has_child;
+    }
+
+    public function setCurrentValue()
+    {
+        if(!$this->hasChild()){
+            return false;
+        }
+        $this->current_value = $this->children->sum('current_value');
     }
 }

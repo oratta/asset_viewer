@@ -35,4 +35,10 @@ $factory->afterCreatingState(App\User::class, 'withAsset', function ($user, $fak
     foreach($uCategoryList as $uCategory){
         $uCategory->userAssets()->saveMany(factory(App\UserAsset::class,5)->make(['user_id' => $user->id]));
     }
+    foreach($uCategoryList as $uCategory){
+        if($uCategory->hasChild()){
+            $uCategory->setCurrentValue();
+            $uCategory->save();
+        }
+    }
 });

@@ -39,4 +39,20 @@ class CategoryMaster extends Model
     {
         return self::whereRaw('section_id = id')->get()->keyBy('id');
     }
+
+    public function getParentAttribute()
+    {
+        if($this->hasParent()){
+            return null;
+        }
+        return $this->parent()->get();
+    }
+
+    public function hasParent()
+    {
+        if($this->parent_id && $this->parent_id !== $this->id){
+            return true;
+        }
+        return false;
+    }
 }
