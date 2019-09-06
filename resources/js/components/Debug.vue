@@ -4,8 +4,8 @@
         <div class="debug__item">
             <h3>Data set</h3>
             <form class="form" @submit.prevent="addAsset">
-                <label for="asset_count">asset count</label>
-                <input type="text" class="form__item" id="asset_count" v-model="addAssetForm.assetCount">
+                <label for="count">asset count</label>
+                <input type="text" class="form__item" id="count" v-model="addAssetForm.assetCount">
                 <div class="form__button">
                     <button type="submit" class="button button--inverse">submit</button>
                 </div>
@@ -21,7 +21,7 @@
         data(){
             return {
                 addAssetForm: {
-                    assetCount: 0,
+                    count: 0,
                 }
             }
         },
