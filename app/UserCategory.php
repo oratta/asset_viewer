@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use mysql_xdevapi\Exception;
 
 class UserCategory extends Model
 {
@@ -111,12 +112,28 @@ class UserCategory extends Model
 
     public function getCurrentRateAttribute()
     {
-        return $this->parent ? $this->parent->current_value * $this->goal_rate : null;
+        if(!$this->parent){
+            return null;
+        }
+        else {
+            if(!$this->parent->current_value){
+                throw new \Exception('invalid data');
+            }
+            return $this->parent->current_value * $this->goal_rate;
+        }
     }
 
     public function getGoalValueAttribute()
     {
-        return $this->parent ? $this->current_value / $this->parent->current_value : null;
+        if(!$this->parent){
+            return null;
+        }
+        else {
+            if(!$this->parent->current_value){
+                throw new \Exception('invalid data');
+            }
+            return $this->current_value / $this->parent->current_value;
+        }
     }
 
     public function hasChild()
@@ -126,9 +143,11 @@ class UserCategory extends Model
 
     public function setCurrentValue()
     {
-        if(!$this->hasChild()){
-            return false;
+        if($this->hasChild()){
+            $this->current_value = $this->children->sum('current_value');
         }
-        $this->current_value = $this->children->sum('current_value');
+        else {
+            $this->current_value = $this->userAssets->sum('value');
+        }
     }
 }

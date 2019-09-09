@@ -49,4 +49,25 @@ class UserAsset extends Model
 
         return $returnList;
     }
+
+    public function save(array $options = [])
+    {
+        if (!$this->validateSave()){
+            throw new \Exception("user asset can't be categorize categories have any children");
+        }
+        parent::save($options);
+    }
+
+    /**
+     * @return bool
+     */
+    private function validateSave()
+    {
+        foreach ($this->userCategories as $uCategory){
+            if($uCategory->hasChild()){
+                return false;
+            }
+        }
+        return true;
+    }
 }

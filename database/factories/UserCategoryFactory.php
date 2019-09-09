@@ -23,13 +23,3 @@ $factory->define(UserCategory::class, function (Faker $faker) {
         'current_value' => 0
     ];
 });
-
-$factory->afterCreating(App\UserCategory::class, function ($userCategory, $faker) {
-        if($userCategory->hasChild()){
-            return;
-        }
-        $userAssetList = factory(App\UserAsset::class,10)->create(["user_id"=>$userCategory->user_id]);
-        $userCategory->userAssets()->saveMany($userAssetList);
-        $userCategory->current_value = $userAssetList->sum('value');
-        $userCategory->save();
-});

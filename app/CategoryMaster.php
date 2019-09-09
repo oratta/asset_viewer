@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class CategoryMaster extends Model
 {
     const MASTER_COUNT = 43;
+    const LEAF_NODE_COUNT = 33; //葉ノードの数(子を持たないノードの数)
     protected $perPage = 15; //ページングのページ数
 
     /** JSONに含める属性の指定 */
