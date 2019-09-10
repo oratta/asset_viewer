@@ -55,6 +55,7 @@ class UserAsset extends Model
         if (!$this->validateSave()){
             throw new \Exception("user asset can't be categorize categories have any children");
         }
+
         parent::save($options);
     }
 

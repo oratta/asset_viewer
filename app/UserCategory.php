@@ -169,8 +169,4 @@ class UserCategory extends Model
         $this->userAssets()->save($uAsset);
         $this->setCurrentValue();
     }
-
-    //金額が変わる
-
-    //アサインが変わる
 }

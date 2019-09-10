@@ -22,6 +22,22 @@ class UserAssetController extends Controller
         ];
     }
 
+    public function categorize(Request $request)
+    {
+        //{assetId -> [section_id => 1,,,],,}
+        $assignList = $request->input('assetList');
+        $uAssetList = $this->user->userAssets()->with('userCategories')->key('id');
+        foreach($uAssetList as $uAssetId => $uAsset){
+            $uAsset->userCategories()->sync($assignList[$uAssetId]);
+            $uAsset->userCategories->each(function($uCategory){
+                $uCategory->setCurrentValue();
+                $uCategory->save();
+            });
+        }
+
+        return response("O.K.",201);
+    }
+
     private function __getSelectInfo()
     {
         $returnList = [];
