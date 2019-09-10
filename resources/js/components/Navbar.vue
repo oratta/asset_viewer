@@ -5,10 +5,14 @@
         </RouterLink>
         <div class="navbar__menu">
             <div v-if="isLogin" class="navbar__item">
-                <button class="button">
-                    <i class="icon ion-md-add"></i>
-                    Submit a photo
-                </button>
+                <RouterLink class="button button--like" to="/user_asset">
+                    user_asset
+                </RouterLink>
+            </div>
+            <div v-if="isLogin" class="navbar__item">
+                <RouterLink class="button button--like" to="/categories">
+                    categories
+                </RouterLink>
             </div>
             <span v-if="isLogin" class="navbar__item">
                 {{ username }}
