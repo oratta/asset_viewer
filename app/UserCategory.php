@@ -98,7 +98,7 @@ class UserCategory extends Model
         if (isset($this->cache["parent"]) && $this->cache["parent"] instanceof UserCategory){
             return $this->cache["parent"];
         }
-        else if($this->categoryMaster->hasParent()) {
+        else if($this->hasParent()) {
             return self::join('category_masters', 'user_categories.category_master_id', '=', 'category_masters.id')
                 ->where([
                     ['user_categories.user_id',$this->user_id],
@@ -141,13 +141,36 @@ class UserCategory extends Model
         return $this->categoryMaster->has_child;
     }
 
+    public function hasParent()
+    {
+        return $this->categoryMaster->hasParent();
+    }
+
     public function setCurrentValue()
     {
+        $origin = $this->current_value;
         if($this->hasChild()){
             $this->current_value = $this->children->sum('current_value');
         }
         else {
             $this->current_value = $this->userAssets->sum('value');
         }
+        if($this->current_vulue !== $origin){
+            if($this->hasParent()){
+                $this->parent->setCurrentValue();
+            }
+        }
+
     }
+
+    //追加される
+    public function addAsset(UserAsset $uAsset)
+    {
+        $this->userAssets()->save($uAsset);
+        $this->setCurrentValue();
+    }
+
+    //金額が変わる
+
+    //アサインが変わる
 }
