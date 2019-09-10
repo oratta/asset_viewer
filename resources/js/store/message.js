@@ -1,13 +1,19 @@
 const state = {
-    code: null,
-    text: "test"
+    mode: 'notice',
+    text: null
 }
 const mutations = {
-    setCode (state, code) {
-        state.code = code
+    setMode (state, mode) {
+        state.mode = mode
     },
-    setText(state, text){
+    setText(state, {text, timeout}){
         state.text = text
+
+        if (typeof timeout === 'undefined'){
+            timeout = 3000
+        }
+
+        setTimeout(() => (state.text = ''), timeout)
     }
 }
 

@@ -4,7 +4,7 @@
             <Navbar />
         </header>
         <main>
-            <MessageBar />
+            <Message />
             <div class="container">
                 <RouterView />
             </div>
@@ -16,7 +16,7 @@
 <script>
     import Navbar from './components/Navbar.vue'
     import Footer from './components/Footer.vue'
-    import MessageBar from './components/MessageBar.vue'
+    import Message from './components/Message.vue'
 
     import { INTERNAL_SERVER_ERROR, UNAUTHORIZED, NOT_FOUND } from "./util";
 
@@ -24,7 +24,7 @@
         components: {
             Navbar,
             Footer,
-            MessageBar,
+            Message,
         },
         computed: {
             errorCode () {
@@ -43,7 +43,10 @@
                         this.$store.commit('auth/setUser', null)
 
                         //メッセージ表示
-                        this.$store.commit('auth/setLoginErrorMessages', 'Please login the system.')
+                        this.$store.commit('message/setText', {
+                            text: 'Please login the system.',
+                            timeout: 6000
+                        })
 
                         // ログイン画面へ
                         this.$router.push('/login')

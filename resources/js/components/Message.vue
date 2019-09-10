@@ -1,8 +1,6 @@
 <template>
-    <div class="message-bar">
-        <div class="message">
-            メッセージ→ {{ message }}
-        </div>
+    <div class="message" v-show="message">
+         {{ message }}
     </div>
 </template>
 
@@ -13,7 +11,6 @@
             ...mapState({
                 message: state => state.message.text,
             })
-        }
-
+        },
     }
 </script>
