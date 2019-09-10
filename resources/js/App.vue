@@ -4,6 +4,7 @@
             <Navbar />
         </header>
         <main>
+            <MessageBar />
             <div class="container">
                 <RouterView />
             </div>
@@ -15,13 +16,15 @@
 <script>
     import Navbar from './components/Navbar.vue'
     import Footer from './components/Footer.vue'
+    import MessageBar from './components/MessageBar.vue'
 
     import { INTERNAL_SERVER_ERROR, UNAUTHORIZED, NOT_FOUND } from "./util";
 
     export default {
         components: {
             Navbar,
-            Footer
+            Footer,
+            MessageBar,
         },
         computed: {
             errorCode () {
@@ -38,6 +41,10 @@
                         await axios.get('/api/refresh-token')
                         // ストアのuserをクリア
                         this.$store.commit('auth/setUser', null)
+
+                        //メッセージ表示
+                        this.$store.commit('auth/setLoginErrorMessages', 'Please login the system.')
+
                         // ログイン画面へ
                         this.$router.push('/login')
                     } else if (val === NOT_FOUND){
@@ -50,6 +57,6 @@
                 this.$store.commit('error/setCode', null)
                 this.$store.commit('error/setMessage', null)
             }
-        }
+        },
     }
 </script>
