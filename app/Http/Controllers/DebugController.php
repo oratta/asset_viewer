@@ -9,9 +9,14 @@ use Illuminate\Support\Facades\Auth;
 
 class DebugController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function addAsset(Request $request)
     {
-        $count = $request->input('count');
+        $count = (int)$request->input('count');
         $this->user = Auth::user();
 
         $uCategoryList = $this->user->userCategories;

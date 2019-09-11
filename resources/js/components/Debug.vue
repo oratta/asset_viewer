@@ -5,7 +5,7 @@
             <h3>Data set</h3>
             <form class="form" @submit.prevent="addAsset">
                 <label for="count">asset count</label>
-                <input type="text" class="form__item" id="count" v-model="addAssetForm.assetCount">
+                <input type="text" class="form__item" id="count" v-model="addAssetForm.count">
                 <div class="form__button">
                     <button type="submit" class="button button--inverse">submit</button>
                 </div>
@@ -27,7 +27,7 @@
         },
         methods: {
             async addAsset () {
-                const response = await axios.post('/api/debug/addCount', this.addAssetForm)
+                const response = await axios.post('/api/debug/add_asset', this.addAssetForm)
 
                 if (response.status !== CREATED){
                     this.$store.commit('error/setCode', response.status)
