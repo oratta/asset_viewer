@@ -11,6 +11,7 @@ class UserAsset extends Model
     protected $visible = [
         'categoryIds',
         'name',
+        'account',
         'value',
     ];
 

@@ -16,6 +16,7 @@ class CreateUserAssetsTable extends Migration
         Schema::create('user_assets', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->text('name');
+            $table->text('account');
             $table->integer('user_id')->reference('id')->on('users');
             $table->bigInteger('value');
             $table->timestamps();
