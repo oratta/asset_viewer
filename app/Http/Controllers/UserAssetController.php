@@ -17,13 +17,13 @@ class UserAssetController extends Controller
     public function index()
     {
         //get SelectInfo
-        $sectionInfo = $this->__getSelectInfo();
+        $sectionInfos = $this->__getSelectInfoList();
 
-        $userAssetList = $this->__getUserAssetList();
+        $userAssets = $this->__getUserAssetList();
 
         return [
-            'sectionInfo' => $sectionInfo,
-            'userAssetList' => $userAssetList,
+            'sectionInfos' => $sectionInfos,
+            'userAssets' => $userAssets,
         ];
     }
 
@@ -43,12 +43,12 @@ class UserAssetController extends Controller
         return response("O.K.",201);
     }
 
-    private function __getSelectInfo()
+    private function __getSelectInfoList()
     {
         $returnList = [];
         $sectionList = CategoryMaster::getSectionList();
         foreach ($sectionList as $sectionId => $section){
-            $nameList = CategoryMaster::where('section_id', $sectionId)->pluck('name', 'id');
+            $nameList = CategoryMaster::where('section_id', $sectionId)->pluck('name', 'id')->sortKeys();
             $returnList[$sectionId] = $nameList;
         }
         return $returnList;
