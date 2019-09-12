@@ -57,7 +57,7 @@ class UserAssetController extends Controller
     private function __getUserAssetList()
     {
         $user = Auth::user();
-        $uAssetList = $user->userAssets;
+        $uAssetList = $user->userAssets()->with(['userCategories', 'userCategories.categoryMaster'])->get();
         return $uAssetList;
     }
 }
