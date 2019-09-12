@@ -48,7 +48,11 @@ class UserAssetController extends Controller
         $returnList = [];
         $sectionList = CategoryMaster::getSectionList();
         foreach ($sectionList as $sectionId => $section){
-            $nameList = CategoryMaster::where('section_id', $sectionId)->pluck('name', 'id')->sortKeys();
+            $nameList = CategoryMaster::
+                where('section_id', $sectionId)
+                ->select('name', 'id')
+                ->orderByRaw('id ASC')
+                ->get();
             $returnList[$sectionId] = $nameList;
         }
         return $returnList;

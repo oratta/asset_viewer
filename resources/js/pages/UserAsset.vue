@@ -7,8 +7,8 @@
                     <th>account name</th>
                     <th>asset name</th>
                     <th>value</th>
-                    <th v-for="sectionInfo in this.sectionInfos">
-                        {{ sectionInfo[0] }}
+                    <th v-for="(sectionInfo, sectionId) in this.sectionInfos">
+                        {{ sectionInfo.slice(0,1)[0].name }}
                     </th>
                 </thead>
                 <tbody>
