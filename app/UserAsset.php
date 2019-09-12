@@ -12,12 +12,13 @@ class UserAsset extends Model
         'categoryIds',
         'name',
         'account',
-        'value',
+        'formattedValue',
     ];
 
     protected $appends = [
         'categoryIds',
-        'categoryMasters'
+        'categoryMasters',
+        'formattedValue'
     ];
 
     public function user()
@@ -35,6 +36,11 @@ class UserAsset extends Model
         return $this->userCategories->map(function ($uCategory) {
             return $uCategory->categoryMaster;
         });
+    }
+
+    public function getFormattedValueAttribute()
+    {
+        return number_format($this->value);
     }
 
 

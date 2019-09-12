@@ -20,7 +20,7 @@
                             {{ userAsset.name }}
                         </td>
                         <td>
-                            {{ userAsset.value }}
+                            {{ userAsset.formattedValue }}
                         </td>
                         <td>
                             <select></select>
