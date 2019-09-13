@@ -18,11 +18,12 @@ class UserAssetController extends Controller
     public function index()
     {
         //get SelectInfo
-        $sectionInfos = $this->__getSelectInfoList();
+        list($sectionInfos, $sections) = $this->__getSelectInfoList();
 
         $userAssets = $this->__getUserAssetList();
 
         return [
+            'sections' => $sections,
             'sectionInfos' => $sectionInfos,
             'userAssets' => $userAssets,
         ];
@@ -54,10 +55,12 @@ class UserAssetController extends Controller
             $nameList = $categoryAll->where('section_id', $sectionId)
                 ->each(function($categoryMaster){
                     $categoryMaster->setFormattedName();
+                })->filter(function($categoryMaster){
+                    return !$categoryMaster->has_child;
                 });
             $returnList[$sectionId] = $nameList->values();
         }
-        return $returnList;
+        return [$returnList, $sectionList];
     }
 
     private function __getCategoriesWithParents(\Illuminate\Support\Collection &$categoryMasters)

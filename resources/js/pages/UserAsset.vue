@@ -7,8 +7,8 @@
                     <th>account name</th>
                     <th>asset name</th>
                     <th>value</th>
-                    <th v-for="(sectionInfo, sectionId) in this.sectionInfos">
-                        {{ sectionInfo.slice(0,1)[0].name }}
+                    <th v-for="(section, sectionId) in this.sections">
+                        {{ section.name }}
                     </th>
                 </thead>
                 <tbody>
@@ -62,6 +62,7 @@
         data () {
             return {
                 uAssets: [],
+                sections: [],
                 sectionInfos: [],
                 userAssets: [],
             }
@@ -74,6 +75,7 @@
                     return false
                 }
                 this.$store.commit('debug/setObj', response)
+                this.sections = response.data.sections
                 this.sectionInfos = response.data.sectionInfos
                 this.userAssets = response.data.userAssets
                 for (var i = 0, len = this.userAssets.length; i < len; ++i) {
