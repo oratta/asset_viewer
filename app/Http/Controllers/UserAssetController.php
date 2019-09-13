@@ -6,6 +6,7 @@ use App\CategoryMaster;
 use App\UserAsset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use mysql_xdevapi\Collection;
 
 class UserAssetController extends Controller
 {
@@ -47,19 +48,27 @@ class UserAssetController extends Controller
     {
         $returnList = [];
         $sectionList = CategoryMaster::getSectionList();
+        $categoryAll = CategoryMaster::all();
+        $categoryAll = $this->__getCategoriesWithParents($categoryAll);
         foreach ($sectionList as $sectionId => $section){
-            $nameList = CategoryMaster::
-                where('section_id', $sectionId)
-                ->select('name', 'id', 'parent_id')
-                ->with('parent')
-                ->orderByRaw('id ASC')
-                ->get()
+            $nameList = $categoryAll->where('section_id', $sectionId)
                 ->each(function($categoryMaster){
                     $categoryMaster->setFormattedName();
                 });
-            $returnList[$sectionId] = $nameList;
+            $returnList[$sectionId] = $nameList->values();
         }
         return $returnList;
+    }
+
+    private function __getCategoriesWithParents(\Illuminate\Support\Collection &$categoryMasters)
+    {
+        $keyByIdList = $categoryMasters->keyBy('id');
+        foreach($keyByIdList as $id => &$category){
+            if($category->hasParent()){
+                $category->parent = $keyByIdList->get($category->parent_id);
+            }
+        }
+        return $keyByIdList;
     }
 
     private function __getUserAssetList()

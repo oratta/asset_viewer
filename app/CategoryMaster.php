@@ -47,10 +47,17 @@ class CategoryMaster extends Model
 
     public function getParentAttribute()
     {
-        if(!$this->hasParent()){
-            return null;
+        if(isset($this->attributes['parent'])){
+            return $this->attributes['parent'];
         }
-        return $this->parent()->first();
+        else {
+            if(!$this->hasParent()){
+                return null;
+            }
+            $this->attributes['parent'] = $this->parent()->first();
+            $this->relations['parent'] = $this->attributes['parent'];
+            return $this->attributes['parent'];
+        }
     }
 
     public function hasParent()
