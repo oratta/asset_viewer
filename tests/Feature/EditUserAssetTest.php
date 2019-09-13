@@ -36,13 +36,19 @@ class EditUserAssetTest extends TestCase
         $uAsset = UserAsset::where('user_id', $this->user->id)->first();
 
         $expected1 = [
-            'sectionInfo' => [
-                1 => [$category->id => $category->name],
-            ],
-        ];
-
+            'sectionInfos' => [
+                1 =>
+                    [0 =>
+                        [
+                            'id' => $category->id,
+                            'name' => $category->name
+                        ]
+                    ],
+                ],
+            ];
+        $uAsset->setFormattedValue();
         $expected2 = [
-            'userAssetList' => [
+            'userAssets' => [
                 0 => [
                     'name' => $uAsset->name,
                     'categoryIds' => [
