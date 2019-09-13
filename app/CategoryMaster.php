@@ -47,17 +47,43 @@ class CategoryMaster extends Model
 
     public function getParentAttribute()
     {
-        if($this->hasParent()){
+        if(!$this->hasParent()){
             return null;
         }
-        return $this->parent()->get();
+        return $this->parent()->first();
     }
 
     public function hasParent()
     {
+        if(!isset($this->parent_id)) throw new \Exception('fail to refer parent_id');
         if($this->parent_id && $this->parent_id !== $this->id){
             return true;
         }
         return false;
+    }
+
+    public function isSection()
+    {
+        if(!isset($this->section_id)) throw new \Exception('fail to refer section_id');
+        if($this->section_id && $this->section_id === $this->id){
+            return true;
+        }
+        return false;
+    }
+
+    public function setFormattedName()
+    {
+        $this->name = $this->getFormattedName();
+        return true;
+    }
+
+    protected function getFormattedName()
+    {
+        $formattedName = '';
+        if($this->hasParent() && !$this->parent->isSection()){
+            $formattedName .= $this->parent->getFormattedName() . "->";
+        }
+
+        return $formattedName . $this->name;
     }
 }

@@ -12,13 +12,12 @@ class UserAsset extends Model
         'categoryIds',
         'name',
         'account',
-        'formattedValue',
+        'value',
     ];
 
     protected $appends = [
         'categoryIds',
         'categoryMasters',
-        'formattedValue'
     ];
 
     public function user()
@@ -37,12 +36,6 @@ class UserAsset extends Model
             return $uCategory->categoryMaster;
         });
     }
-
-    public function getFormattedValueAttribute()
-    {
-        return number_format($this->value);
-    }
-
 
     public function getCategoryIdsAttribute()
     {
@@ -77,5 +70,15 @@ class UserAsset extends Model
             }
         }
         return true;
+    }
+
+    protected function getFormattedValue()
+    {
+        return number_format($this->value);
+    }
+
+    public function setFormattedValue()
+    {
+        $this->value = $this->getFormattedValue();
     }
 }

@@ -20,16 +20,28 @@
                             {{ userAsset.name }}
                         </td>
                         <td>
-                            {{ userAsset.formattedValue }}
+                            {{ userAsset.value }}
                         </td>
                         <td>
-                            <select></select>
+                            <select>
+                                <option v-for="category in userAsset.sectionInfos['1']" :value="category.id">
+                                    {{ category.name }}
+                                </option>
+                            </select>
                         </td>
                         <td>
-                            <select></select>
+                            <select>
+                                <option v-for="category in userAsset.sectionInfos['2']" :value="category.id">
+                                    {{ category.name }}
+                                </option>
+                            </select>
                         </td>
                         <td>
-                            <select></select>
+                            <select>
+                                <option v-for="category in userAsset.sectionInfos['3']" :value="category.id">
+                                    {{ category.name }}
+                                </option>
+                            </select>
                         </td>
                     </tr>
                 </tbody>
@@ -56,8 +68,11 @@
                     return false
                 }
                 this.$store.commit('debug/setObj', response)
-                this.sectionInfos = response.data.sectionInfos;
-                this.userAssets = response.data.userAssets;
+                this.sectionInfos = response.data.sectionInfos
+                this.userAssets = response.data.userAssets
+                for (var i = 0, len = this.userAssets.length; i < len; ++i) {
+                    this.userAssets[i].sectionInfos = this.sectionInfos
+                }
             },
         },
         watch: {

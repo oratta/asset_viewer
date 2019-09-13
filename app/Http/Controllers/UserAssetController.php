@@ -50,9 +50,13 @@ class UserAssetController extends Controller
         foreach ($sectionList as $sectionId => $section){
             $nameList = CategoryMaster::
                 where('section_id', $sectionId)
-                ->select('name', 'id')
+                ->select('name', 'id', 'parent_id')
+                ->with('parent')
                 ->orderByRaw('id ASC')
-                ->get();
+                ->get()
+                ->each(function($categoryMaster){
+                    $categoryMaster->setFormattedName();
+                });
             $returnList[$sectionId] = $nameList;
         }
         return $returnList;
@@ -61,7 +65,10 @@ class UserAssetController extends Controller
     private function __getUserAssetList()
     {
         $user = Auth::user();
-        $uAssetList = $user->userAssets()->with(['userCategories', 'userCategories.categoryMaster'])->get();
+        $uAssetList = $user->userAssets()->with(['userCategories', 'userCategories.categoryMaster'])->get()
+                        ->each(function($userAsset){
+                            $userAsset->setFormattedValue();
+                        });
         return $uAssetList;
     }
 }
