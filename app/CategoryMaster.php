@@ -18,6 +18,7 @@ class CategoryMaster extends Model
     protected $visible = [
         'id',
         'name',
+        'section_id'
     ];
 
     public function userCategories()
