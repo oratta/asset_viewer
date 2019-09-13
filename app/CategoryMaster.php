@@ -84,13 +84,17 @@ class CategoryMaster extends Model
         return true;
     }
 
-    protected function getFormattedName()
+    protected function getFormattedName( $formattedName = '')
     {
-        $formattedName = '';
-        if($this->hasParent() && !$this->parent->isSection()){
-            $formattedName .= $this->parent->getFormattedName() . "->";
+        if($this->isFormattedName){
+            return $this->name;
         }
-
-        return $formattedName . $this->name;
+        else {
+            if($this->hasParent() && !$this->parent->isSection()){
+                $formattedName = $this->parent->getFormattedName() . "->";
+            }
+            $this->isFormattedName = true;
+            return $formattedName . $this->name;
+        }
     }
 }
