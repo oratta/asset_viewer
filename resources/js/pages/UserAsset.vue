@@ -13,35 +13,41 @@
                 </thead>
                 <tbody>
                     <tr v-for="userAsset in this.userAssets">
-                        <td>
+                        <td class="user-asset__data">
                             {{ userAsset.account }}
                         </td>
-                        <td>
+                        <td class="user-asset__data">
                             {{ userAsset.name }}
                         </td>
-                        <td>
+                        <td class="user-asset__data">
                             {{ userAsset.value }}
                         </td>
                         <td>
-                            <select>
-                                <option v-for="category in userAsset.sectionInfos['1']" :value="category.id">
-                                    {{ category.name }}
-                                </option>
-                            </select>
+                            <div class="user-asset__select sl">
+                                <select>
+                                    <option v-for="category in userAsset.sectionInfos['1']" :value="category.id">
+                                        {{ category.name }}
+                                    </option>
+                                </select>
+                            </div>
                         </td>
                         <td>
-                            <select>
-                                <option v-for="category in userAsset.sectionInfos['2']" :value="category.id">
-                                    {{ category.name }}
-                                </option>
-                            </select>
+                            <div class="user-asset__select sl">
+                                <select>
+                                    <option v-for="category in userAsset.sectionInfos['2']" :value="category.id">
+                                        {{ category.name }}
+                                    </option>
+                                </select>
+                            </div>
                         </td>
                         <td>
-                            <select>
-                                <option v-for="category in userAsset.sectionInfos['3']" :value="category.id">
-                                    {{ category.name }}
-                                </option>
-                            </select>
+                            <div class="user-asset__select sl">
+                                <select>
+                                    <option v-for="category in userAsset.sectionInfos['3']" :value="category.id">
+                                        {{ category.name }}
+                                    </option>
+                                </select>
+                            </div>
                         </td>
                     </tr>
                 </tbody>
