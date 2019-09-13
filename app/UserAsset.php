@@ -13,6 +13,7 @@ class UserAsset extends Model
         'name',
         'account',
         'value',
+        'id'
     ];
 
     protected $appends = [

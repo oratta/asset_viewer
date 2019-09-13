@@ -22,11 +22,11 @@
                         <td class="user-asset__data">
                             {{ userAsset.value }}
                         </td>
-                        <td v-for="sectionInfo in userAsset.sectionInfos">
+                        <td v-for="categories in userAsset.sectionInfos">
                             <div class="user-asset__select sl">
-                                <select>
+                                <select :name="userAsset.id + '_' + categories[0].section_id">
                                     <option selected="selected">select...</option>
-                                    <option v-for="category in sectionInfo" :value="category.section_id + '_' + category.id">
+                                    <option v-for="category in categories" :value="category.id">
                                         {{ category.name }}
                                     </option>
                                 </select>
