@@ -13,6 +13,7 @@ class UserAssetController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->user = Auth::user();
     }
 
     public function index()
@@ -32,7 +33,7 @@ class UserAssetController extends Controller
     public function categorize(Request $request)
     {
         //{assetId -> [section_id => 1,,,],,}
-        $inputArray = $request->input();
+        $inputArray = $request->all();
         $saveInfo = array();
         foreach($inputArray as $key => $categoryId){
             list($assetId, $sectionId) = explode('-', $key);
@@ -45,7 +46,12 @@ class UserAssetController extends Controller
         $uAssetList = $this->user->userAssets()
                 ->whereIn('id', array_keys($saveInfo))
                 ->with('userCategories')
-                ->key('id');
+                ->get()
+                ->keyBy('id');
+
+        if($uAssetList->count() !== count($saveInfo)){
+            throw new \Exception('invalid data');
+        }
 
         foreach($uAssetList as $uAssetId => $uAsset){
             $uAsset->userCategories()->sync($saveInfo[$uAssetId]);

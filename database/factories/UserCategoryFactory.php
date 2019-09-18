@@ -14,7 +14,7 @@ $factory->define(UserCategory::class, function (Faker $faker) {
             return mt_rand(1, 43);
         },
         'user_id' => function () {
-            return factory(App\User::class)->crate()->id;
+            return factory(App\User::class)->create()->id;
         },
         'goal_ratio' => function () {
             //goal_ratioのmax値を定数化

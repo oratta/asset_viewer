@@ -8,7 +8,7 @@ use Faker\Generator as Faker;
 $factory->define(UserAsset::class, function (Faker $faker) {
     return [
         'user_id' => function(){
-            return factory(App\User::class)->crate()->id;
+            return factory(App\User::class)->create()->id;
         },
         'name' => $faker->streetName,
         'account' => $faker->streetName,

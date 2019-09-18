@@ -20,6 +20,6 @@ Route::post('/debug/add_asset', 'DebugController@addAsset')->name('debug.addAsse
 //本番用
 Route::get('/portfolio', 'UserCategoryController@portfolio')->name('portfolio');
 Route::get('/user_asset', 'UserAssetController@index')->name('userAsset');
-Route::post('/categorize')->name('categorize.save');
+Route::post('/categorize', 'UserAssetController@categorize')->name('categorize.save');
 Route::get('/goal')->name('goal.view');
 Route::post('/goal')->name('goal.save');
