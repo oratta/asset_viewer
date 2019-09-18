@@ -28,7 +28,8 @@ class EditUserAssetTest extends TestCase
         $request = $this->actingAs($this->user)
             ->json('get', route('userAsset'));
 
-        $category = CategoryMaster::where('section_id',1)->first();
+        $category = CategoryMaster::where('section_id',1)->where('id',4)->first();
+        $category->setFormattedName();
         $uAsset = UserAsset::where('user_id', $this->user->id)->first();
 
         $expected1 = [
