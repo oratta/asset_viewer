@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\CategoryMaster;
 use App\User;
 use App\UserAsset;
+use App\UserCategory;
 use Tests\TestCase;
 use Tests\SeedingDatabase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -62,5 +63,48 @@ class EditUserAssetTest extends TestCase
         $request->assertStatus(200);
         $request->assertJson($expected1);
         $request->assertJson($expected2);
+    }
+
+    /**
+     * @test
+     */
+    public function should_user_assetにcategoryをアサインする()
+    {
+        $postData = [
+            '1-1' => 1,
+        ];
+        //存在しないデータでエラー
+        $response = $this->actingAs($this->user)
+            ->json('post', route('categorize.save'));
+
+        $response->assertStatus(500);
+
+
+        $postData = [
+            '1-1' => 1,
+            '1-2' => 12,
+            '1-3' => 23,
+            '2-1' => 3,
+        ];
+        factory(UserAsset::class,2)->create();
+        foreach($postData as $categoryId){
+            factory(UserCategory::class)->create(['category_id' => $categoryId]);
+        }
+        $response = $this->actingAs($this->user)
+            ->json('post', route('categorize.save'));
+
+        $response->assertStatus(201);
+        $this->assertDatabaseHas('user_asset_user_category', ['user_asset_id' => 1, 'user_category_id' => 1]);
+        $this->assertDatabaseHas('user_asset_user_category', ['user_asset_id' => 1, 'user_category_id' => 12]);
+        $this->assertDatabaseHas('user_asset_user_category', ['user_asset_id' => 1, 'user_category_id' => 23]);
+        $this->assertDatabaseHas('user_asset_user_category', ['user_asset_id' => 2, 'user_category_id' => 3]);
+    }
+
+    /**
+     * @test
+     */
+    public function should_user_assetのcategoryを更新する()
+    {
+        $this->fail('todo: implement');
     }
 }
