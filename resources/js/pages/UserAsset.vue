@@ -24,7 +24,7 @@
                         </td>
                         <td v-for="categories in userAsset.sectionInfos">
                             <div class="user-asset__select sl">
-                                <select :name="userAsset.id + '_' + categories[0].section_id">
+                                <select :name="userAsset.id + '-' + categories[0].section_id">
                                     <option selected="selected">select...</option>
                                     <option v-for="category in categories" :value="category.id">
                                         {{ category.name }}

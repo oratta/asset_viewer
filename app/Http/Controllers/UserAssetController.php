@@ -32,10 +32,23 @@ class UserAssetController extends Controller
     public function categorize(Request $request)
     {
         //{assetId -> [section_id => 1,,,],,}
-        $assignList = $request->input('assetList');
-        $uAssetList = $this->user->userAssets()->with('userCategories')->key('id');
+        $inputArray = $request->input();
+        $saveInfo = array();
+        foreach($inputArray as $key => $categoryId){
+            list($assetId, $sectionId) = explode('-', $key);
+            if(!isset($saveInfo[$assetId])){
+                $saveInfo[$assetId] = array();
+            }
+            $saveInfo[$assetId][] = $categoryId;
+        }
+
+        $uAssetList = $this->user->userAssets()
+                ->whereIn('id', array_keys($saveInfo))
+                ->with('userCategories')
+                ->key('id');
+
         foreach($uAssetList as $uAssetId => $uAsset){
-            $uAsset->userCategories()->sync($assignList[$uAssetId]);
+            $uAsset->userCategories()->sync($saveInfo[$uAssetId]);
             $uAsset->userCategories->each(function($uCategory){
                 $uCategory->setCurrentValue();
                 $uCategory->save();
