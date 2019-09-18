@@ -99,5 +99,33 @@ class EditUserAssetTest extends TestCase
      */
     public function should_user_assetのcategoryを更新する()
     {
+        $this->user = factory(User::class)->states('justRegistered')->create();
+        factory(UserAsset::class,2)->create(['user_id' => $this->user->id]);
+
+        $postData = [
+            '1-1' => 1,
+            '1-2' => 12,
+            '1-3' => 23,
+            '2-1' => 3,
+        ];
+        factory(UserAsset::class,2)->create(['user_id' => $this->user->id]);
+        $response = $this->actingAs($this->user)
+            ->json('post', route('categorize.save'), $postData);
+        $response->assertStatus(201);
+
+
+        $postData = [
+            '1-1' => 1,
+            '1-2' => 12,
+            '1-3' => 21,
+            '2-1' => 3,
+        ];
+        $response = $this->actingAs($this->user)
+            ->json('post', route('categorize.save'), $postData);
+        $response->assertStatus(201);
+        $this->assertDatabaseHas('user_asset_user_category', ['user_asset_id' => 1, 'user_category_id' => 1]);
+        $this->assertDatabaseHas('user_asset_user_category', ['user_asset_id' => 1, 'user_category_id' => 12]);
+        $this->assertDatabaseHas('user_asset_user_category', ['user_asset_id' => 1, 'user_category_id' => 21]);
+        $this->assertDatabaseHas('user_asset_user_category', ['user_asset_id' => 2, 'user_category_id' => 3]);
     }
 }
