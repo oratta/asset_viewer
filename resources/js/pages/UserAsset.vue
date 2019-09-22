@@ -3,6 +3,7 @@
         <div class="container">
             <h2>Your Asset List</h2>
             <Loader v-show="loading">loading your data</Loader>
+            <Loader v-show="categorizing">processing to categorize your data</Loader>
             <div v-show="! loading">
                 <form class="form" @submit.prevent="categorize">
                     <table>
@@ -39,7 +40,8 @@
                         </tbody>
                     </table>
                     <div class="form__button">
-                        <button type="submit" class="button button--inverse">categorize</button>
+                        <Loader v-show="categorizing">processing to categorize your data</Loader>
+                        <button v-bind:disabled="categorizing" type="submit" class="button button--inverse">categorize</button>
                     </div>
                 </form>
             </div>
@@ -49,7 +51,7 @@
 </template>
 
 <script>
-    import { OK } from '../util'
+    import { OK, CREATED } from '../util'
     import Loader from '../components/Loader.vue'
 
     export default {
@@ -62,6 +64,7 @@
                 sectionInfos: [],
                 userAssets: [],
                 loading: false,
+                categorizing: false,
             }
         },
         computed: {
@@ -71,8 +74,6 @@
                     for (var sectionId=1;sectionId<=3;sectionId++){
                         var key = uAsset.id + "-" + sectionId
                         returnArr[key] = uAsset['categoryIds'][sectionId]
-                        console.log(key)
-                        console.log(returnArr[key])
                     }
                 })
                 return returnArr
@@ -97,7 +98,19 @@
                 }
             },
             async categorize () {
+                this.categorizing = true
                 const response = await axios.post('/api/categorize', this.categorizeForm)
+                this.categorizing = false
+
+                if (response.status !== CREATED) {
+                    this.$store.commit('error/setCode', response.status)
+                    return false
+                }
+
+                this.$store.commit('message/setText', {
+                    text: 'Update your assets categorize.',
+                    timeout: 6000
+                })
             },
         },
         watch: {
