@@ -26,7 +26,7 @@
                             </td>
                             <td v-for="categories in userAsset.sectionInfos">
                                 <div class="user-asset__select sl">
-                                    <select v-model="userAsset[categories[0].section_id]">
+                                    <select v-model="userAsset['categoryIds'][categories[0].section_id]">
                                         <option selected="selected">select...</option>
                                         <option v-for="category in categories" :value="category.id">
                                             {{ category.name }}
@@ -59,13 +59,13 @@
         },
         computed: {
             categorizeForm(){
-                console.log("categorizeForm:start to create form data")
                 var returnArr = {}
                 this.userAssets.forEach(function(uAsset){
-                    console.log("categorizeForm:in assets loop")
                     for (var sectionId=1;sectionId<=3;sectionId++){
                         var key = uAsset.id + "-" + sectionId
-                        returnArr[key] = uAsset[sectionId]
+                        returnArr[key] = uAsset['categoryIds'][sectionId]
+                        console.log(key)
+                        console.log(returnArr[key])
                     }
                 })
                 return returnArr
