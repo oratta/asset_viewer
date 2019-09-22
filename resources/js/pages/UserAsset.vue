@@ -2,7 +2,8 @@
     <div class="user-asset">
         <div class="container">
             <h2>Your Asset List</h2>
-            <div>
+            <Loader v-show="loading">loading your data</Loader>
+            <div v-show="! loading">
                 <form class="form" @submit.prevent="categorize">
                     <table>
                         <thead>
@@ -49,12 +50,18 @@
 
 <script>
     import { OK } from '../util'
+    import Loader from '../components/Loader.vue'
+
     export default {
+        components: {
+            Loader,
+        },
         data () {
             return {
                 sections: [],
                 sectionInfos: [],
                 userAssets: [],
+                loading: false,
             }
         },
         computed: {
@@ -73,7 +80,10 @@
         },
         methods: {
             async fetchUserAsset () {
+                this.loading = true
                 const response = await axios.get(`/api/user_asset/`)
+                this.loading = false
+
                 if (response.status !== OK) {
                     this.$store.commit('error/setCode', response.status)
                     return false
