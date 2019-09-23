@@ -116,9 +116,6 @@ class UserCategory extends Model
             return null;
         }
         else {
-            if(!$this->parent->current_value){
-                throw new \Exception('invalid data');
-            }
             return $this->parent->current_value * $this->goal_rate;
         }
     }
@@ -130,9 +127,11 @@ class UserCategory extends Model
         }
         else {
             if(!$this->parent->current_value){
-                throw new \Exception('invalid data');
+                return 0;
             }
-            return $this->current_value / $this->parent->current_value;
+            else {
+                return $this->current_value / $this->parent->current_value;
+            }
         }
     }
 
