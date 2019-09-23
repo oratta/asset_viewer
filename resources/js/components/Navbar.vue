@@ -5,11 +5,16 @@
         </RouterLink>
         <div class="navbar__menu">
             <div v-if="isLogin" class="navbar__item">
+                <RouterLink class="button button--like" to="/portfolio">
+                    portfolio
+                </RouterLink>
+            </div>
+            <div v-if="isLogin" class="navbar__item">
                 <RouterLink class="button button--like" to="/user_asset">
                     user_asset
                 </RouterLink>
             </div>
-            <div v-if="isLogin" class="navbar__item">
+            <div class="navbar__item">
                 <RouterLink class="button button--like" to="/categories">
                     categories
                 </RouterLink>
