@@ -19,22 +19,8 @@ class DebugController extends Controller
         $count = (int)$request->input('count');
         $this->user = Auth::user();
 
-        $uCategoryList = $this->user->userCategories;
-        $created = [];
-        foreach($uCategoryList as $uCategory){
-            if(!$uCategory->hasChild()){
-                $uAssetList = factory(UserAsset::class,$count)->make(['user_id' => $this->user->id]);
-                $uCategory->userAssets()->saveMany($uAssetList);
-                $created[$uCategory->id] = $uAssetList;
-            }
-        }
-        foreach($uCategoryList as $uCategory){
-            if($uCategory->hasChild()){
-                $uCategory->setCurrentValue();
-                $uCategory->save();
-            }
-        }
+        $uAssetList = factory(UserAsset::class,$count)->create(['user_id' => $this->user->id]);
 
-        return response($created,201);
+        return response($uAssetList,201);
     }
 }
