@@ -26,6 +26,6 @@ class __AddAssetTest extends TestCase
         $response = $this->actingAs($this->user)->json('POST', route('debug.addAsset'), $data);
 
         $response->assertStatus(201);
-        $this->assertEquals($data["count"]*CategoryMaster::LEAF_NODE_COUNT, UserAsset::where('user_id', $this->user->id)->count());
+        $this->assertEquals($data["count"], UserAsset::where('user_id', $this->user->id)->count());
     }
 }
