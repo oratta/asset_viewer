@@ -68,11 +68,25 @@ class UserAssetController extends Controller
 
     private function __saveUserCategoryCurrentValue(array $updateUCategoryIds)
     {
-        $rootUCategories = $this->__getRootNodeUCategory($updateUCategoryIds);
-        foreach($rootUCategories as $rootUCategory){
+        $sections = $this->__getSections($updateUCategoryIds);
+        foreach($sections as $rootUCategory){
             $rootUCategory->setCurrentValue();
             $rootUCategory->save();
         }
+    }
+
+    private function __getSections(array $updateUCategoryIds)
+    {
+        $uCategories = UserCategory::whereIn('id', $updateUCategoryIds)
+            ->with('categoryMaster')
+            ->get()
+            ->keyBy('id');
+
+        $sectionIds = $uCategories->map(function($uCategory){
+           return $uCategory->getSectionId();
+        })->unique()->toArray();
+
+
     }
 
     private function __getRootNodeUCategory($updateUCategoryIds)
