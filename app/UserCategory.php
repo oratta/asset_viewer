@@ -54,6 +54,9 @@ class UserCategory extends Model
 
     public function getCurrentInfoAttribute()
     {
+        $a = 1;
+        $b = 2;
+        $a = $b;
         return [
             'value' => $this->current_value,
             'rate' => $this->current_rate,
@@ -145,21 +148,29 @@ class UserCategory extends Model
         return $this->categoryMaster->hasParent();
     }
 
-    public function setCurrentValue()
+    /**
+     * 自分の値が変わったことを親に伝搬しないので、
+     * ルートノードで実行すること
+     */
+    public function setCurrentValue($isRecursion = false)
     {
-        $origin = $this->current_value;
+        if(!$isRecursion && !$this->isSection()){
+            throw new Exception('invalid data. setCurrentValue have to be called as root node(section node)');
+        }
         if($this->hasChild()){
+            foreach($this->children as $child){
+                $child->setCurrentValue(true);
+            }
             $this->current_value = $this->children->sum('current_value');
         }
         else {
             $this->current_value = $this->userAssets->sum('value');
         }
-        if($this->current_vulue !== $origin){
-            if($this->hasParent()){
-                $this->parent->setCurrentValue();
-            }
-        }
+    }
 
+    public function getName()
+    {
+        return $this->categoryMaster->name;
     }
 
     //追加される

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\CategoryMaster;
+use App\User;
 use App\UserAsset;
+use App\UserCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use mysql_xdevapi\Collection;
+use Illuminate\Support\Collection;
 
 class UserAssetController extends Controller
 {
@@ -47,7 +49,6 @@ class UserAssetController extends Controller
 
         $uAssetList = $this->user->userAssets()
                 ->whereIn('id', array_keys($saveInfo))
-                ->with('userCategories')
                 ->get()
                 ->keyBy('id');
 
@@ -57,13 +58,51 @@ class UserAssetController extends Controller
 
         foreach($uAssetList as $uAssetId => $uAsset){
             $uAsset->userCategories()->sync($saveInfo[$uAssetId]);
-            $uAsset->userCategories->each(function($uCategory){
-                $uCategory->setCurrentValue();
-                $uCategory->save();
-            });
         }
 
+        $updateUCategoryIds = collect($saveInfo)->collapse()->unique()->toArray();
+        $this->__saveUserCategoryCurrentValue($updateUCategoryIds);
+
         return response("O.K.",201);
+    }
+
+    private function __saveUserCategoryCurrentValue(array $updateUCategoryIds)
+    {
+        $rootUCategories = $this->__getRootNodeUCategory($updateUCategoryIds);
+        foreach($rootUCategories as $rootUCategory){
+            $rootUCategory->setCurrentValue();
+            $rootUCategory->save();
+        }
+    }
+
+    private function __getRootNodeUCategory($updateUCategoryIds)
+    {
+        $candidates = UserCategory::whereIn('id', $updateUCategoryIds)->get()->keyBy('id');
+        return $this->__getRootNodeCUategoryRoop($candidates);
+    }
+
+    /**
+     * @param Collection $candidates key by id
+     * @param array $fixList
+     * @return array|mixed
+     */
+    private function __getRootNodeCUategoryRoop(Collection $candidates, $fixList = [])
+    {
+        $fixList = [];
+        $candidate = $candidates->shift();
+        if(!$candidate->hasParent()){
+            $fixList[$candidate->id] = $candidate;
+        }
+        else {
+            $parent = $candidate->parent;
+            if(!$candidates->has($parent->id)){
+                $candidates->push($parent);
+            }
+        }
+
+        return $candidates->isEmpty()
+            ? $fixList
+            : $this->__getRootNodeCUategoryRoop($candidates, $fixList);
     }
 
     private function __getSelectInfoList()
