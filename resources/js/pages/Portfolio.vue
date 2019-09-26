@@ -11,7 +11,7 @@
             </ul>
             <div class="panel">
                 <div class="summary">
-                    合計 : {{ sections[sectionTab].current_info.val }}
+                    合計 : ¥{{ sections[sectionTab].current_info.value }}
                 </div>
                 <div class="pie-chart">
 
@@ -22,7 +22,7 @@
                                 v-for="(asset, index) in sections[sectionTab].children"
                                 class="asset-list__item"
                         >
-                            {{asset.name}} : ¥{{ asset.current_info.val }} ({{ asset.current_info.rate }}%)
+                            {{asset.name}} : ¥{{ asset.current_info.value }} ({{ asset.current_info.rate }}%)
                         </li>
                     </ul>
                 </div>
