@@ -33,6 +33,6 @@ class UserCategoryTest extends TestCase
 
     public function testIsCache_forNormal()
     {
-        
+
     }
 }

@@ -14,11 +14,11 @@ trait MethodCache
             $key = $this->getCallFrom();
         }
         else {
-            if($this->relationLoaded($key)) {
-                return true;
-            }
             if($this->hasGetMutator($key)){
                 $key = 'get'.Str::studly($key).'Attribute';
+            }
+            elseif($this->relationLoaded($key)) {
+                return true;
             }
         }
 
@@ -30,30 +30,31 @@ trait MethodCache
             $key = $this->getCallFrom();
         }
         else {
-            if($this->relationLoaded($key)) {
-                return $this->relations[$key];
-            }
             if($this->hasGetMutator($key)){
                 $key = 'get'.Str::studly($key).'Attribute';
+            }
+            elseif($this->relationLoaded($key)) {
+                return $this->relations[$key];
             }
         }
 
         return $this->__methodCache[$key];
     }
 
-    public function setCache($key=null, $value)
+    public function setCache($value, $key=null)
     {
         if(!$key){
             $key = $this->getCallFrom();
         }
         else {
-            if($this->relationLoaded($key)) {
-                $this->relations[$key] = $value;
-                return;
-            }
             if($this->hasGetMutator($key)){
                 $key = 'get'.Str::studly($key).'Attribute';
             }
+            elseif($this->relationLoaded($key)) {
+                $this->relations[$key] = $value;
+                return;
+            }
+
         }
 
         $this->__methodCache[$key] = $value;
@@ -62,6 +63,6 @@ trait MethodCache
     private  function getCallFrom()
     {
         $bt = debug_backtrace();
-        return $bt[1]['function'];
+        return $bt[2]['function'];
     }
 }

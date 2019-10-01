@@ -3,8 +3,9 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use mysql_xdevapi\Exception;
+use Exception;
 
 class UserCategory extends Model
 {
@@ -73,6 +74,7 @@ class UserCategory extends Model
 
     public function getChildrenAttribute()
     {
+        if($this->isCached())return $this->getCache();
         $children = self::join('category_masters', 'user_categories.category_master_id', '=', 'category_masters.id')
             ->where([
                 ['user_categories.user_id',$this->user_id],
@@ -84,12 +86,25 @@ class UserCategory extends Model
            $child->parent = $this;
         });
 
-        return $children;
+        $this->setCache($children);
+        return $this->getCache();
+    }
+
+    public function setChildrenAttribute(Collection $children)
+    {
+        $this->setCache($children);
+    }
+
+    public function getChildrenIds()
+    {
+        return $this->children->map(function($child){
+            return $child->id;
+        })->toArray();
     }
 
     public function setParentAttribute(UserCategory $parent)
     {
-        $this->cache["parent"] = $parent;
+        $this->setCache($parent);
     }
 
     /**
@@ -98,6 +113,8 @@ class UserCategory extends Model
      */
     public function getParentAttribute()
     {
+        if($this->isCached()) return $this->getCache();
+
         if (isset($this->cache["parent"]) && $this->cache["parent"] instanceof UserCategory){
             return $this->cache["parent"];
         }
@@ -154,12 +171,13 @@ class UserCategory extends Model
      */
     public function setCurrentValue($isRecursion = false)
     {
-        if(!$isRecursion && !$this->isSection()){
+        if(!$isRecursion && !$this->categoryMaster->isSection()){
             throw new Exception('invalid data. setCurrentValue have to be called as root node(section node)');
         }
         if($this->hasChild()){
             foreach($this->children as $child){
                 $child->setCurrentValue(true);
+                $child->save();
             }
             $this->current_value = $this->children->sum('current_value');
         }
@@ -172,7 +190,7 @@ class UserCategory extends Model
     {
         return UserCategory::join('category_masters', 'user_categories.category_master_id', 'category_masters.id')
                 ->where('category_masters.id',$this->categoryMaster->section_id)
-                ->first();
+                ->first()->id;
     }
 
     public function getName()

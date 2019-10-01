@@ -91,10 +91,10 @@ class UserAssetController extends Controller
            return $uCategory->getSectionUCategoryId();
         })->unique()->toArray();
 
-        $section = $this->user->getNestedUserCategories();
+        $sections = $this->user->getNestedSections();
         $targetSections = [];
         foreach($targetSectionIds as $id){
-            $targetSections[] = $section[$id];
+            $targetSections[] = $sections->get($id);
         }
 
         return $targetSections;

@@ -72,14 +72,14 @@ class User extends Authenticatable
         return $uSectionList;
     }
 
-    public function getNestedUserCategories()
+    public function getNestedSections()
     {
         $uCategoryAll = $this->getUserCategoriesWithMaster();
 
         $sections = $this->getSections($uCategoryAll);
         $sections = $this->setUserCategoriesNest($sections, $uCategoryAll);
 
-        return $sections;
+        return $sections->keyBy('id');
     }
 
     /**
@@ -92,6 +92,8 @@ class User extends Authenticatable
         foreach($baseUCategories as &$uCategory){
             $this->setChildrenNest($uCategory, $uCategoryAll);
         }
+
+        return $baseUCategories;
     }
 
     /**
@@ -100,10 +102,8 @@ class User extends Authenticatable
      */
     private function setChildrenNest(UserCategory &$parent, Collection $uCategoryAll)
     {
-        //TODO isCache
-        if($parent->hasChild() && !$parent->isCache('children')){
-            //TODO
-            $childIds = $parent->getChildIds();
+        if($parent->hasChild() && !$parent->isCached('children')){
+            $childIds = $parent->getChildrenIds();
 
             $children = [];
             foreach($uCategoryAll as $child){
@@ -112,15 +112,14 @@ class User extends Authenticatable
                 }
             }
             foreach ($children as &$child) {
-                //TODO
-                $child->setParent($parent);
-                //TODO Collection::wrap, get
-                $child = $this->setChildrenNest(Collection::wrap($child), $uCategoryAll)->get();
-            }
-            //TODO setChildren
-            $parent->setChildlen($children);
-        }
+                $child->parent = $parent;
 
+                $child = $this->setChildrenNest($child, $uCategoryAll);
+            }
+
+            $parent->children = collect($children)->keyBy('id');
+        }
+        return $parent;
     }
 
     private function getUserCategoriesWithMaster()

@@ -39,9 +39,9 @@ $factory->afterCreatingState(App\User::class, 'withAsset', function ($user, $fak
     }
     $sortedList = collect($uCategoryList)->sortByDesc("category_master_id");
     foreach($sortedList as $uCategory){
-        $uCategory->setCurrentValue();
+        if($uCategory->categoryMaster->isSection()) $uCategory->setCurrentValue();
         $uCategory->save();
-}
+    }
 });
 
 
