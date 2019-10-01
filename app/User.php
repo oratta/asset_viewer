@@ -53,15 +53,80 @@ class User extends Authenticatable
     /**
      * @return array
      */
-    public function getNestedUserCategoryList() : Collection
+    public function getSections(Collection $uCategoryAll = null) : Collection
     {
-        $query = UserCategory::join('category_masters', 'user_categories.category_master_id', '=', 'category_masters.id')
-            ->whereRaw(
-                "category_masters.section_id = category_masters.id and 
+        if($uCategoryAll){
+            $uSectionList = $uCategoryAll->filter(function($uCategory){
+                return $uCategory->categoryMaster->isSection();
+            });
+        }
+        else {
+            $query = UserCategory::join('category_masters', 'user_categories.category_master_id', '=', 'category_masters.id')
+                ->whereRaw(
+                    "category_masters.section_id = category_masters.id and 
                         user_categories.user_id=$this->id"
-            );
-        $uSectionList = $query->get();
+                )->with(['categoryMaster']);
+            $uSectionList = $query->get();
+        }
 
         return $uSectionList;
+    }
+
+    public function getNestedUserCategories()
+    {
+        $uCategoryAll = $this->getUserCategoriesWithMaster();
+
+        $sections = $this->getSections($uCategoryAll);
+        $sections = $this->setUserCategoriesNest($sections, $uCategoryAll);
+
+        return $sections;
+    }
+
+    /**
+     * 下方向にネストする。
+     * @param Collection $baseUCategories
+     * @param Collection $uCategoryAll category all with master
+     */
+    private function setUserCategoriesNest(Collection &$baseUCategories, Collection $uCategoryAll)
+    {
+        foreach($baseUCategories as &$uCategory){
+            $this->setChildrenNest($uCategory, $uCategoryAll);
+        }
+    }
+
+    /**
+     * @param UserCategory $parent
+     * @param Collection $uCategoryAll
+     */
+    private function setChildrenNest(UserCategory &$parent, Collection $uCategoryAll)
+    {
+        //TODO isCache
+        if($parent->hasChild() && !$parent->isCache('children')){
+            //TODO
+            $childIds = $parent->getChildIds();
+
+            $children = [];
+            foreach($uCategoryAll as $child){
+                if(in_array($child->id, $childIds)){
+                    $children[] = $child;
+                }
+            }
+            foreach ($children as &$child) {
+                //TODO
+                $child->setParent($parent);
+                //TODO Collection::wrap, get
+                $child = $this->setChildrenNest(Collection::wrap($child), $uCategoryAll)->get();
+            }
+            //TODO setChildren
+            $parent->setChildlen($children);
+        }
+
+    }
+
+    private function getUserCategoriesWithMaster()
+    {
+        return $this->userCategories()
+                 ->with('categoryMaster')
+                 ->get();
     }
 }

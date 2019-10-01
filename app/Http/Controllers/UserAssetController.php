@@ -12,6 +12,11 @@ use Illuminate\Support\Collection;
 
 class UserAssetController extends Controller
 {
+    /**
+     * @var User
+     */
+    protected $user;
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -77,16 +82,22 @@ class UserAssetController extends Controller
 
     private function __getSections(array $updateUCategoryIds)
     {
-        $uCategories = UserCategory::whereIn('id', $updateUCategoryIds)
+        $savedUCategories = UserCategory::whereIn('id', $updateUCategoryIds)
             ->with('categoryMaster')
             ->get()
             ->keyBy('id');
 
-        $sectionIds = $uCategories->map(function($uCategory){
-           return $uCategory->getSectionId();
+        $targetSectionIds = $savedUCategories->map(function($uCategory){
+           return $uCategory->getSectionUCategoryId();
         })->unique()->toArray();
 
+        $section = $this->user->getNestedUserCategories();
+        $targetSections = [];
+        foreach($targetSectionIds as $id){
+            $targetSections[] = $section[$id];
+        }
 
+        return $targetSections;
     }
 
     private function __getRootNodeUCategory($updateUCategoryIds)

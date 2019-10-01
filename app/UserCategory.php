@@ -3,10 +3,13 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 use mysql_xdevapi\Exception;
 
 class UserCategory extends Model
 {
+    use MethodCache;
+
     const MAX_GOAL_RATIO = 10000;
 
     protected $cache = [];
@@ -54,9 +57,6 @@ class UserCategory extends Model
 
     public function getCurrentInfoAttribute()
     {
-        $a = 1;
-        $b = 2;
-        $a = $b;
         return [
             'value' => $this->current_value,
             'rate' => $this->current_rate,
@@ -168,6 +168,13 @@ class UserCategory extends Model
         }
     }
 
+    public function getSectionUCategoryId()
+    {
+        return UserCategory::join('category_masters', 'user_categories.category_master_id', 'category_masters.id')
+                ->where('category_masters.id',$this->categoryMaster->section_id)
+                ->first();
+    }
+
     public function getName()
     {
         return $this->categoryMaster->name;
@@ -179,4 +186,5 @@ class UserCategory extends Model
         $this->userAssets()->save($uAsset);
         $this->setCurrentValue();
     }
+
 }

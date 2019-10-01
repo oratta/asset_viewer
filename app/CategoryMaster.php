@@ -10,8 +10,11 @@ class CategoryMaster extends Model
     const LEAF_NODE_COUNT = 33; //葉ノードの数(子を持たないノードの数)
     protected $perPage = 15; //ページングのページ数
 
+    //join時に数値がstringに変換されてしまう対策
     protected $casts = [
-        'parent_id' => 'int', // added_onはいつでもDATE型で取得する
+        'parent_id' => 'int',
+        'id' => 'int',
+        'section_id' => 'int',
     ];
 
     /** JSONに含める属性の指定 */
