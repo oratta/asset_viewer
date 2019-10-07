@@ -21,6 +21,7 @@ class UserCategoryTest extends TestCase
         $this->assertFalse($uCategory->isCached('categoryMaster'));
         $a = $uCategory->categoryMaster;
         $this->assertTrue($uCategory->isCached('categoryMaster'));
+        $this->assertEquals($a, $uCategory->getCache('categoryMaster'));
     }
 
     /**
@@ -28,11 +29,11 @@ class UserCategoryTest extends TestCase
      */
     public function testIsCache_forMutate()
     {
-
-    }
-
-    public function testIsCache_forNormal()
-    {
+        $uCategory = factory(UserCategory::class)->create();
+        $this->assertFalse($uCategory->isCached('children'));
+        $a = $uCategory->children;
+        $this->assertTrue($uCategory->isCached('children'));
+        $this->assertEquals($a, $uCategory->getCache('children'));
 
     }
 }
