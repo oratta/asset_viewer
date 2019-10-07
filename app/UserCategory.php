@@ -92,7 +92,7 @@ class UserCategory extends Model
 
     public function setChildrenAttribute(Collection $children)
     {
-        $this->setCache($children);
+        $this->setCache($children, 'children');
     }
 
     public function getChildrenIds()
@@ -104,7 +104,7 @@ class UserCategory extends Model
 
     public function setParentAttribute(UserCategory $parent)
     {
-        $this->setCache($parent);
+        $this->setCache($parent,'parent');
     }
 
     /**
@@ -115,19 +115,19 @@ class UserCategory extends Model
     {
         if($this->isCached()) return $this->getCache();
 
-        if (isset($this->cache["parent"]) && $this->cache["parent"] instanceof UserCategory){
-            return $this->cache["parent"];
-        }
-        else if($this->hasParent()) {
-            return self::join('category_masters', 'user_categories.category_master_id', '=', 'category_masters.id')
+        if($this->hasParent()) {
+            $parent = self::join('category_masters', 'user_categories.category_master_id', '=', 'category_masters.id')
                 ->where([
                     ['user_categories.user_id',$this->user_id],
                     ['category_masters.id', $this->categoryMaster->parent_id],
                 ])->first();
         }
         else {
-            return null;
+            $parent = null;
         }
+
+        $this->setCache($parent);
+        return $parent;
     }
 
     public function getCurrentRateAttribute()

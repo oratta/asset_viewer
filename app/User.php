@@ -112,7 +112,7 @@ class User extends Authenticatable
                 }
             }
             foreach ($children as &$child) {
-                $child->parent = $parent;
+                $child->setCache($parent,'parent');
 
                 $child = $this->setChildrenNest($child, $uCategoryAll);
             }
