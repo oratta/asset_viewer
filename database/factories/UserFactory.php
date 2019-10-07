@@ -2,7 +2,7 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 use App\User;
-use App\UserAssetCategory;
+use App\UserAsset;
 use Illuminate\Support\Str;
 use Faker\Generator as Faker;
 
@@ -28,7 +28,26 @@ $factory->define(User::class, function (Faker $faker) {
 });
 
 $factory->afterCreatingState(App\User::class, 'withAsset', function ($user, $faker) {
-    for($i=1;$i<=\App\AssetCategoryMaster::MASTER_COUNT;++$i){
-        factory(App\UserAssetCategory::class)->create(['user_id'=>$user->id, 'asset_category_master_id'=>$i]);
+    $uCategoryList = [];
+    for($i=1; $i<=\App\CategoryMaster::MASTER_COUNT; ++$i){
+        $uCategoryList[] = factory(App\UserCategory::class)->create(['user_id'=>$user->id, 'category_master_id'=>$i]);
+    }
+    foreach($uCategoryList as $uCategory){
+        if(!$uCategory->hasChild()){
+            $uCategory->userAssets()->saveMany(factory(App\UserAsset::class,5)->make(['user_id' => $user->id]));
+        }
+    }
+    $sortedList = collect($uCategoryList)->sortByDesc("category_master_id");
+    foreach($sortedList as $uCategory){
+        if($uCategory->categoryMaster->isSection()) $uCategory->setCurrentValue();
+        $uCategory->save();
+    }
+});
+
+
+$factory->afterCreatingState(App\User::class, 'justRegistered', function ($user, $faker) {
+    $uCategoryList = [];
+    for($i=1; $i<=\App\CategoryMaster::MASTER_COUNT; ++$i){
+        $uCategoryList[] = factory(App\UserCategory::class)->create(['user_id'=>$user->id, 'category_master_id'=>$i]);
     }
 });

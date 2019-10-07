@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\AssetCategoryMaster;
+use App\CategoryMaster;
 use Illuminate\Http\Request;
 
-class AssetCategoryController extends Controller
+class CategoryController extends Controller
 {
     public function __construct()
     {
@@ -17,7 +17,7 @@ class AssetCategoryController extends Controller
      */
     public function index()
     {
-        $assetCategory = AssetCategoryMaster::paginate();
-        return $assetCategory;
+        $category = CategoryMaster::paginate();
+        return $category;
     }
 }

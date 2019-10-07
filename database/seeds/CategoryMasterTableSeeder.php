@@ -2,11 +2,11 @@
 
 use Illuminate\Database\Seeder;
 
-class AssetCategoryMasterTableSeeder extends Seeder
+class CategoryMasterTableSeeder extends Seeder
 {
-    protected $csvFileName = "AssetCategoryMaster.csv";
+    protected $csvFileName = "CategoryMaster.csv";
     protected $csvFilePath = "";
-    protected $tableName = 'asset_category_masters';
+    protected $tableName = 'category_masters';
     /**
      * Run the database seeds.
      *
@@ -27,14 +27,16 @@ class AssetCategoryMasterTableSeeder extends Seeder
 
     protected function getArrayFromCsv()
     {
-        if(!$this->csvFilePath) throw Exception("not set csv File");
+        if(!$this->csvFilePath) {
+            throw new Exception("not set csv File");
+        }
         $content = file_get_contents($this->csvFilePath);
-        $contentArray = explode("\r\n", $content);
+        $content = str_replace(['\r\n','\r','\n'], '\n', $content);
+        $contentArray = explode("\n", $content);
         $indexArray = array_shift($contentArray);
         $indexArray = explode(',', $indexArray);
-//        dump($contentArray);
-        if(count($contentArray) !== \App\AssetCategoryMaster::MASTER_COUNT){
-            throw new Exception("invalid master data. count=" . count($contentArray).". MASTER_COUNT=" . \App\AssetCategoryMaster::MASTER_COUNT);
+        if(count($contentArray) !== \App\CategoryMaster::MASTER_COUNT){
+            throw new Exception("invalid master data. count=" . count($contentArray).". MASTER_COUNT=" . \App\CategoryMaster::MASTER_COUNT);
         }
         $returnArray = [];
         foreach ($contentArray as $index => $recode) {
@@ -45,8 +47,6 @@ class AssetCategoryMasterTableSeeder extends Seeder
             }
             $returnArray[$instanceArray['id']] = $instanceArray;
         }
-//        dump(mb_detect_encoding($returnArray[1]['name']));
-//        dump($returnArray);
 
         return $returnArray;
     }

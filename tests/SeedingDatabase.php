@@ -6,6 +6,5 @@ trait SeedingDatabase {
     protected function seedingDatabase()
     {
         Artisan::call('migrate:refresh --seed');
-        static::$databaseSetup = true;
     }
 }

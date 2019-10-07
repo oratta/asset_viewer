@@ -45,23 +45,87 @@ class User extends Authenticatable
         return $this->hasMany('App\UserAsset');
     }
 
-    public function userAssetCategories()
+    public function userCategories()
     {
-        return $this->hasMany('App\UserAssetCategory');
+        return $this->hasMany('App\UserCategory');
     }
 
     /**
      * @return array
      */
-    public function getNestedUserAssetCategoryList() : Collection
+    public function getSections(Collection $uCategoryAll = null) : Collection
     {
-        $query = UserAssetCategory::join('asset_category_masters', 'user_asset_categories.asset_category_master_id', '=', 'asset_category_masters.id')
-            ->whereRaw(
-                "asset_category_masters.section_id = asset_category_masters.id and 
-                        user_asset_categories.user_id=$this->id"
-            );
-        $uSectionList = $query->get();
+        if($uCategoryAll){
+            $uSectionList = $uCategoryAll->filter(function($uCategory){
+                return $uCategory->categoryMaster->isSection();
+            });
+        }
+        else {
+            $query = UserCategory::join('category_masters', 'user_categories.category_master_id', '=', 'category_masters.id')
+                ->whereRaw(
+                    "category_masters.section_id = category_masters.id and 
+                        user_categories.user_id=$this->id"
+                )->with(['categoryMaster']);
+            $uSectionList = $query->get();
+        }
 
         return $uSectionList;
+    }
+
+    public function getNestedSections()
+    {
+        $uCategoryAll = $this->getUserCategoriesWithMaster();
+
+        $sections = $this->getSections($uCategoryAll);
+        $sections = $this->setUserCategoriesNest($sections, $uCategoryAll);
+
+        return $sections->keyBy('id');
+    }
+
+    /**
+     * 下方向にネストする。
+     * @param Collection $baseUCategories
+     * @param Collection $uCategoryAll category all with master
+     */
+    private function setUserCategoriesNest(Collection &$baseUCategories, Collection $uCategoryAll)
+    {
+        foreach($baseUCategories as &$uCategory){
+            $this->setChildrenNest($uCategory, $uCategoryAll);
+        }
+
+        return $baseUCategories;
+    }
+
+    /**
+     * @param UserCategory $parent
+     * @param Collection $uCategoryAll
+     */
+    private function setChildrenNest(UserCategory &$parent, Collection $uCategoryAll)
+    {
+        if($parent->hasChild() && !$parent->isCached('children')){
+            $childIds = $parent->getChildrenIds();
+
+            $children = [];
+            foreach($uCategoryAll as $child){
+                if(in_array($child->id, $childIds)){
+                    $children[] = $child;
+                }
+            }
+            foreach ($children as &$child) {
+                $child->setCache($parent,'parent');
+
+                $child = $this->setChildrenNest($child, $uCategoryAll);
+            }
+
+            $parent->children = collect($children)->keyBy('id');
+        }
+        return $parent;
+    }
+
+    private function getUserCategoriesWithMaster()
+    {
+        return $this->userCategories()
+                 ->with('categoryMaster')
+                 ->get();
     }
 }

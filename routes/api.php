@@ -12,11 +12,14 @@ Route::get('/reflesh-token', function (Illuminate\Http\Request $request) {
 });
 
 //動作確認用
-Route::get('/categories', 'AssetCategoryController@index')->name('category.index');
+Route::get('/categories', 'CategoryController@index')->name('category.index');
+
+//デバッグメニュー用
+Route::post('/debug/add_asset', 'DebugController@addAsset')->name('debug.addAsset');
 
 //本番用
-Route::get('/portfolio', 'UserAssetCategoryController@portfolio')->name('portfolio');
-Route::get('/categorize')->name('categorize.view');
-Route::post('/categorize')->name('categorize.save');
+Route::get('/portfolio', 'UserCategoryController@portfolio')->name('portfolio');
+Route::get('/user_asset', 'UserAssetController@index')->name('userAsset');
+Route::post('/categorize', 'UserAssetController@categorize')->name('categorize.save');
 Route::get('/goal')->name('goal.view');
 Route::post('/goal')->name('goal.save');
