@@ -17,7 +17,7 @@ class UserCategoryController extends Controller
     public function portfolio()
     {
         $this->user = Auth::user();
-        $uCategoryList = $this->user->getNestedUserCategories();
+        $uCategoryList = $this->user->getNestedSections()->values();
 
         return $uCategoryList->isEmpty() ? abort(204) : $uCategoryList;
     }
