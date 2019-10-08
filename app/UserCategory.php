@@ -136,7 +136,7 @@ class UserCategory extends Model
             return null;
         }
         else {
-            return $this->parent->current_value * $this->goal_rate;
+            return $this->parent->current_value ? round($this->current_value / $this->parent->current_value * 100, 2) : 0;
         }
     }
 
