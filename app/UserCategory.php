@@ -59,16 +59,16 @@ class UserCategory extends Model
     public function getCurrentInfoAttribute()
     {
         return [
-            'value' => $this->current_value,
-            'rate' => $this->current_rate,
+            'value' => number_format($this->current_value),
+            'rate' => round($this->current_rate,2),
         ];
     }
 
     public function getGoalInfoAttribute()
     {
         return [
-            'value' => $this->goal_value,
-            'rate' => $this->goal_rate,
+            'value' => number_format($this->goal_value),
+            'rate' => round($this->goal_rate,2),
         ];
     }
 
@@ -136,7 +136,7 @@ class UserCategory extends Model
             return null;
         }
         else {
-            return $this->parent->current_value ? round($this->current_value / $this->parent->current_value * 100, 2) : 0;
+            return $this->parent->current_value ? $this->current_value / $this->parent->current_value * 100 : 0;
         }
     }
 
