@@ -17,3 +17,5 @@ public
 firebase-debug\.log
 
 .DS_Store
+
+database/seeds/UserAsset.csv
