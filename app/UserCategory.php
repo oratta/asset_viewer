@@ -189,7 +189,10 @@ class UserCategory extends Model
     public function getSectionUCategoryId()
     {
         return UserCategory::join('category_masters', 'user_categories.category_master_id', 'category_masters.id')
-                ->where('category_masters.id',$this->categoryMaster->section_id)
+                ->where([
+                    ['user_categories.user_id','=',$this->user_id],
+                    ['category_masters.id','=',$this->categoryMaster->section_id]
+                    ])
                 ->first()->id;
     }
 
