@@ -82,13 +82,17 @@ class EditUserAssetTest extends TestCase
             ->json('post', route('categorize.save'), $postData);
 
         $response->assertStatus(201);
-//        $this->assertDatabaseHas('user_asset_user_category', ['user_asset_id' => 1, 'user_category_id' => 2]);
-//        $this->assertDatabaseHas('user_asset_user_category', ['user_asset_id' => 1, 'user_category_id' => 12]);
-//        $this->assertDatabaseHas('user_asset_user_category', ['user_asset_id' => 1, 'user_category_id' => 23]);
-//        $this->assertDatabaseHas('user_asset_user_category', ['user_asset_id' => 2, 'user_category_id' => 3]);
+        foreach($postData as $assetId_section => $uCategoryId){
+            list($assetId, $sectionNumber) = explode('-', $assetId_section);
+            $this->assertDatabaseHas('user_asset_user_category', ['user_asset_id' => $assetId, 'user_category_id' => $uCategoryId]);
+        }
 
         //current_value set to UserCategory
-        $uCategory = UserCategory::where('id',1)->first();
+        $uCategory = UserCategory::where([
+            ['category_master_id','=',1],
+            ['user_id', '=', $this->user->id]
+        ])->first();
+//        $uCategory->setCurrentValue();
         $this->assertEquals('通貨', $uCategory->getName());
         $this->assertEquals($uAssets->sum('value'), $uCategory->current_value);
     }

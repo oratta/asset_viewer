@@ -80,7 +80,9 @@ class UserCategory extends Model
                 ['user_categories.user_id',$this->user_id],
                 ['category_masters.parent_id', $this->category_master_id],
                 ['user_categories.id','<>', $this->id],
-            ])->get();
+            ])
+            ->select('user_categories.id')
+            ->get();
 
         $children->each(function ($child) {
            $child->parent = $this;
@@ -188,12 +190,17 @@ class UserCategory extends Model
 
     public function getSectionUCategoryId()
     {
-        return UserCategory::join('category_masters', 'user_categories.category_master_id', 'category_masters.id')
+        $uCategory = UserCategory::join('category_masters', 'user_categories.category_master_id', 'category_masters.id')
                 ->where([
                     ['user_categories.user_id','=',$this->user_id],
                     ['category_masters.id','=',$this->categoryMaster->section_id]
                     ])
-                ->first()->id;
+                ->select('user_categories.id')
+                ->first();
+
+        $id = $uCategory->id;
+
+        return $id;
     }
 
     public function getName()
