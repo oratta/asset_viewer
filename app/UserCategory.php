@@ -59,16 +59,16 @@ class UserCategory extends Model
     public function getCurrentInfoAttribute()
     {
         return [
-            'value' => $this->current_value,
-            'rate' => $this->current_rate,
+            'value' => number_format($this->current_value),
+            'rate' => round($this->current_rate,2),
         ];
     }
 
     public function getGoalInfoAttribute()
     {
         return [
-            'value' => $this->goal_value,
-            'rate' => $this->goal_rate,
+            'value' => number_format($this->goal_value),
+            'rate' => round($this->goal_rate,2),
         ];
     }
 
@@ -80,7 +80,9 @@ class UserCategory extends Model
                 ['user_categories.user_id',$this->user_id],
                 ['category_masters.parent_id', $this->category_master_id],
                 ['user_categories.id','<>', $this->id],
-            ])->get();
+            ])
+            ->select('user_categories.id')
+            ->get();
 
         $children->each(function ($child) {
            $child->parent = $this;
@@ -136,7 +138,7 @@ class UserCategory extends Model
             return null;
         }
         else {
-            return $this->parent->current_value * $this->goal_rate;
+            return $this->parent->current_value ? $this->current_value / $this->parent->current_value * 100 : 0;
         }
     }
 
@@ -188,9 +190,17 @@ class UserCategory extends Model
 
     public function getSectionUCategoryId()
     {
-        return UserCategory::join('category_masters', 'user_categories.category_master_id', 'category_masters.id')
-                ->where('category_masters.id',$this->categoryMaster->section_id)
-                ->first()->id;
+        $uCategory = UserCategory::join('category_masters', 'user_categories.category_master_id', 'category_masters.id')
+                ->where([
+                    ['user_categories.user_id','=',$this->user_id],
+                    ['category_masters.id','=',$this->categoryMaster->section_id]
+                    ])
+                ->select('user_categories.id')
+                ->first();
+
+        $id = $uCategory->id;
+
+        return $id;
     }
 
     public function getName()
