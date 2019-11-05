@@ -15,7 +15,8 @@ public
 /public
 .idea
 firebase-debug\.log
-
+geckodriver.log
 .DS_Store
 /app/Console/Commands/script/py/venv
 database/seeds/UserAsset.csv
+__pycache__/
