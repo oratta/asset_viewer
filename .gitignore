@@ -17,5 +17,5 @@ public
 firebase-debug\.log
 
 .DS_Store
-
+/app/Console/Commands/script/py/venv
 database/seeds/UserAsset.csv
