@@ -21,5 +21,6 @@ Route::post('/debug/add_asset', 'DebugController@addAsset')->name('debug.addAsse
 Route::get('/portfolio', 'UserCategoryController@portfolio')->name('portfolio');
 Route::get('/user_asset', 'UserAssetController@index')->name('userAsset');
 Route::post('/categorize', 'UserAssetController@categorize')->name('categorize.save');
+Route::post('/load', 'UserAssetController@load')->name('load');
 Route::get('/goal')->name('goal.view');
 Route::post('/goal')->name('goal.save');

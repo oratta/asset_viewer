@@ -40,6 +40,14 @@ class UserAssetController extends Controller
         ];
     }
 
+    /**
+     * MFからUserAssetをロードする
+     */
+    public function load()
+    {
+
+    }
+
     public function categorize(Request $request)
     {
         $inputArray = $request->all();
