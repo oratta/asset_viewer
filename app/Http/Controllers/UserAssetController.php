@@ -45,7 +45,15 @@ class UserAssetController extends Controller
      */
     public function load()
     {
+        //API叩く
+//        $filePath = $this->__callScrapingScript();
+        $filePath = Artisan::call('script:python scraping/main.py');
 
+        //CSV読み込む
+//        $csvData = $this->__loadCsv($filePath);
+
+
+        //DB保存
     }
 
     public function categorize(Request $request)

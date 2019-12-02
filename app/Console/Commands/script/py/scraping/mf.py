@@ -173,5 +173,8 @@ class mf:
         # 変換したいJSONファイルを読み込む
         df = pd.read_json(json.dumps(csv_array))
 
+        filePath = "/tmp/asset.csv"
         # CSVに変換して任意のファイル名で保存
-        df.to_csv("/tmp/asset.csv", index=False)
+        df.to_csv(filePath, index=False)
+
+        return filePath

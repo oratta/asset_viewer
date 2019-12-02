@@ -1,9 +1,12 @@
 from mf import mf
+import sys
 
 def main():
     instance = mf()
     browser = instance.login()
-    instance.loadPortfolio(browser)
+    filePath = instance.loadPortfolio(browser)
+    return filePath
 
 if __name__ == "__main__":
-    main()
+    filePath = main()
+    sys.exit(filePath)
