@@ -166,7 +166,7 @@ class mf:
                         row_array['account'] = td.text
                     # print(td.text)
                     tr_id += 1
-                row_array['section'] = section_name
+                row_array['assign_rule'] = section_name
                 print(row_array)
                 csv_array.append(row_array)
 

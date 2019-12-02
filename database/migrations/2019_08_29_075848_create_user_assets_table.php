@@ -19,6 +19,7 @@ class CreateUserAssetsTable extends Migration
             $table->text('account');
             $table->integer('user_id')->reference('id')->on('users');
             $table->bigInteger('value');
+            $table->text('assign_rule');
             $table->timestamps();
         });
     }
